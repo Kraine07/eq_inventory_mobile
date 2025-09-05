@@ -1,0 +1,6 @@
+
+
+enum RoleType {
+  ADMINISTRATOR,
+  EDITOR
+}
