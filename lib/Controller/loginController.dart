@@ -115,6 +115,7 @@ class _LoginControllerState extends State<LoginController> {
           child: Form(
               key: _formKey,
               child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                     spacing: 12,
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -138,6 +139,7 @@ class _LoginControllerState extends State<LoginController> {
 
                       // Email Input
                       AppInputField(
+                        keyboard: TextInputType.emailAddress,
                           label: "Email",
                           controller: _emailController,
                           obscureText: false,
@@ -152,7 +154,6 @@ class _LoginControllerState extends State<LoginController> {
 
                       // Password input
                       AppInputField(
-
                           icon: AppIcon(
                             icon: Symbols.lock_outline,
                             weight: 200,

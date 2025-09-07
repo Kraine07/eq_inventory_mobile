@@ -10,6 +10,7 @@ class AppInputField extends StatefulWidget {
   final Widget icon;
   BorderStyle borderStyle;
   double  radius;
+  TextInputType keyboard;
 
   AppInputField({
     super.key,
@@ -20,7 +21,8 @@ class AppInputField extends StatefulWidget {
     required this.icon,
     required this.onChanged,
     this.borderStyle = BorderStyle.solid,
-    this.radius = 8.0
+    this.radius = 8.0,
+    this.keyboard = TextInputType.text
   }
   );
 
@@ -37,6 +39,7 @@ class _AppInputFieldState extends State<AppInputField> {
         selectionColor: AppColors.textSecondary
       ),
       child: TextFormField(
+        keyboardType: widget.keyboard,
         cursorColor: AppColors.appWhite,
         obscureText: widget.obscureText,
         validator: (val)=> widget.validator(val),

@@ -1,7 +1,10 @@
 
 import 'package:equipment_inventory/Components/heading.dart';
 import 'package:equipment_inventory/Components/icon.dart';
-import 'package:equipment_inventory/Components/textFormField.dart';
+import 'package:equipment_inventory/DashboardScreens/equipmentScreen.dart';
+import 'package:equipment_inventory/DashboardScreens/propertiesScreen.dart';
+import 'package:equipment_inventory/DashboardScreens/reportsScreen.dart';
+import 'package:equipment_inventory/DashboardScreens/usersScreen.dart';
 import 'package:equipment_inventory/Model/userModel.dart';
 import 'package:equipment_inventory/theme.dart';
 import 'package:flutter/material.dart';
@@ -31,59 +34,73 @@ class _DashboardState extends State<Dashboard> {
      String? firstName = authUser?.firstName?.toUpperCase();
      String? lastName = authUser?.lastName?.toUpperCase();
 
-    return  Scaffold(
-      body: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: 1200
-        ),
-        child: SingleChildScrollView(
+    return  DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        body: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: 1200
+          ),
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 5),
             decoration: BoxDecoration(
               color: AppColors.appBlue
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Heading(searchController: _searchController,showIcon: false,name: "$lastName, $firstName",),
+            child: Column(
+              children: [
+                Heading(searchController: _searchController,showIcon: false,name: "$lastName, $firstName",),
 
-                ],
-              ),
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      EquipmentScreen(),
+                      UsersScreen(),
+                      PropertiesScreen(),
+                      ReportsScreen(),
+                  ]),
+                ),
+
+              ],
             ),
           ),
         ),
+
+
+
+        bottomNavigationBar: Material(
+          color: AppColors.appDarkBlue,
+          child: TabBar(
+
+            labelStyle: TextStyle(
+              fontSize: 13,
+              color: AppColors.accentColor
+            ),
+            indicator: BoxDecoration(),
+            indicatorColor: AppColors.accentColor,
+            dividerHeight: 0,
+
+
+            tabs: [
+              Tab(
+                text: "Equipment",
+                icon: Icon(Symbols.kitchen),
+              ),
+              Tab(
+                text: "Users",
+                icon: Icon(Symbols.group),
+              ),
+              Tab(
+                text: "Properties",
+                icon: Icon(Symbols.apartment),
+              ),
+              Tab(
+                text: "Reports",
+                icon: Icon(Symbols.bar_chart),
+              )
+            ],
+          ),
+        ),
       ),
-      persistentFooterButtons: [
-        ElevatedButton(onPressed: (){},
-            child: Text(
-              "Button",
-              style: TextStyle(color: AppColors.appWhite),
-            )
-        ),
-
-        ElevatedButton(onPressed: (){},
-            child: Text(
-              "Button",
-              style: TextStyle(color: AppColors.appWhite),
-            )
-        ),
-
-        ElevatedButton(onPressed: (){},
-            child: Text(
-              "Button",
-              style: TextStyle(color: AppColors.appWhite),
-            )
-        ),
-
-        ElevatedButton(onPressed: (){},
-            child: Text(
-              "Button",
-              style: TextStyle(color: AppColors.appWhite),
-            )
-        )
-      ],
-      persistentFooterAlignment: AlignmentDirectional.center,
     );
   }
 }

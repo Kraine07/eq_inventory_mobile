@@ -6,13 +6,22 @@ import 'package:equipment_inventory/Service/apiService.dart';
 import 'package:http/http.dart';
 
 class UserService extends APIService{
+  List<UserModel> _userList = [];
   UserModel? _authUser;
-  late bool isLoggedIn = false;
+  bool isLoggedIn = false;
+
+
 
   UserModel? get authUser => _authUser;
+  List<UserModel> get userList => _userList;
 
   set setAuthUser(UserModel user) {
     _authUser = user;
+    notifyListeners();
+  }
+
+  set setUserList(List<UserModel> list){
+    _userList = list;
     notifyListeners();
   }
 

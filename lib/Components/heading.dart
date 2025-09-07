@@ -29,59 +29,65 @@ class _HeadingState extends State<Heading> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      spacing: 20,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween
-          ,
+    return Material(
+      color: AppColors.appDarkBlue,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
           spacing: 20,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Visibility(
-              visible: widget.showIcon,
-                child: AppIcon(icon: Symbols.arrow_back, weight: 500)),
-            Text("Equipment",
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween
+              ,
+              spacing: 20,
+              children: [
+                Visibility(
+                  visible: widget.showIcon,
+                    child: AppIcon(icon: Symbols.arrow_back, weight: 500)),
+                Text("Equipment",
+                  style: TextStyle(
+                      fontSize: 32
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    spacing: 12,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      AppIcon(icon: Symbols.add, weight: 300,size: 32,),
+                      AppIcon(icon: Symbols.construction, weight: 300,size: 32,)
+                    ],
+                  ),
+                )
+              ],
+            ),
+
+
+
+            Text(widget.name,
               style: TextStyle(
-                  fontSize: 32
+                  fontSize: 18,
+                  color: AppColors.textSecondary
               ),
             ),
-            Expanded(
-              child: Row(
-                spacing: 12,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  AppIcon(icon: Symbols.add, weight: 300,size: 32,),
-                  AppIcon(icon: Symbols.construction, weight: 300,size: 32,)
-                ],
-              ),
-            )
+
+
+
+            AppInputField(
+              label: "Search",
+                radius: 1000.0,
+                borderStyle: BorderStyle.none,
+                controller: widget.searchController,
+                obscureText: false,
+                validator: (val){},
+                icon: AppIcon(icon: Symbols.search, weight: 300),
+                onChanged: (val){}
+            ),
           ],
         ),
-
-
-
-        Text(widget.name,
-          style: TextStyle(
-              fontSize: 18,
-              color: AppColors.textSecondary
-          ),
-        ),
-
-
-
-        AppInputField(
-          label: "Search",
-            radius: 1000.0,
-            borderStyle: BorderStyle.none,
-            controller: widget.searchController,
-            obscureText: false,
-            validator: (val){},
-            icon: AppIcon(icon: Symbols.search, weight: 300),
-            onChanged: (val){}
-        ),
-      ],
+      ),
     );
   }
 }
