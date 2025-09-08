@@ -1,6 +1,9 @@
-import 'package:equipment_inventory/Components/icon.dart';
-import 'package:equipment_inventory/Service/propertyService.dart';
+
+import 'package:equipment_inventory/Components/locationSheet.dart';
+import 'package:equipment_inventory/Model/equipmentModel.dart';
+import 'package:equipment_inventory/Service/equipmentService.dart';
 import 'package:equipment_inventory/theme.dart';
+import 'package:equipment_inventory/utilityMethods.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -21,7 +24,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
 
     super.initState();
     Future.microtask(() => {
-      Provider.of<PropertyService>(context, listen: false).retrieveList()
+      Provider.of<EquipmentService>(context, listen: false).retrieveList()
     });
   }
 
@@ -30,53 +33,109 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
   Widget build(BuildContext context) {
 
 
+    return Consumer<EquipmentService>(
+        builder: (context, eqService,child){
+          // final listByProperty = eqService.groupedByProperty.entries.toList();
+          final byPropertyThenLocation = eqService.groupedByPropertyThenLocation;
+          return ListView.builder(
+            itemCount: byPropertyThenLocation.length,
+              itemBuilder: (context, propertyIndex){
 
-    return Consumer<PropertyService>(
-      builder: (context,property, child) {
-        return GridView.builder(
-          itemCount: property.propertyList.length,
-          padding: EdgeInsets.all(12),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 3 / 1
-            ),
 
-            itemBuilder: (context, index){
-              return InkWell(
-                onTap: (){
-                  // show property sheet
-                  showCupertinoSheet(
-                    useNestedNavigation: true,
-                    context: context, builder: (BuildContext context){
-                      return Material(
-                        child: Container(
-                          child: Text(property.propertyList[index].name.toString().toUpperCase())),
-                      );
-                    }
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
+              // properties
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(8),
                     color: AppColors.appLightBlue,
-                    borderRadius: BorderRadius.all(Radius.circular(8))
-                  ),
-                  child: Center(
-                    child: Text(
-                      property.propertyList[index].name.toString().toUpperCase(),
-                      style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 12
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 8,
+                        children: [
+
+                          //property name
+                          Text(
+                            byPropertyThenLocation.keys.elementAt(propertyIndex).toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w200
+                            ),
+                          ),
+
+
+                          // List of locations
+                          Flexible(
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: byPropertyThenLocation.values.elementAt(propertyIndex).length,
+                                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 320,
+                                  mainAxisExtent: 100,
+                                  mainAxisSpacing: 2,
+                                  crossAxisSpacing: 4
+                                ),
+                                itemBuilder: (context, locationIndex){
+
+
+                                  return InkWell(
+                                    onTap: (){
+                                      showCupertinoSheet(
+                                        enableDrag: true,
+                                        useNestedNavigation: true,
+                                        context: context,
+                                        builder: (context){
+
+
+                                          // location sheet
+                                          return LocationSheet(
+                                            locationIndex: locationIndex,
+                                            propertyIndex: propertyIndex,
+                                            byPropertyThenLocation: byPropertyThenLocation,
+                                          );
+
+                                        }
+                                      );
+                                    },
+
+                                    // location name
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.appDarkBlue,
+                                        borderRadius: BorderRadius.circular(8)
+                                      ),
+
+                                      padding: EdgeInsets.all(12),
+                                        margin: EdgeInsets.all(12),
+                                        child: Center(
+
+                                          // location name
+                                            child: Text(
+                                              textAlign: TextAlign.center,
+                                              UtilityMethods.capitalizeEachWord(byPropertyThenLocation.values.elementAt(propertyIndex).keys.elementAt(locationIndex)),
+                                              style: TextStyle(
+                                                fontSize: 14
+                                              ),
+                                          )
+                                        )
+                                    ),
+                                  );
+                                },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ),
-              );
-            }
-            );
-      }
+                );
+              },
+          );
+        }
     );
+
+
   }
 }

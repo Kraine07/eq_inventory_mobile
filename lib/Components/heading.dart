@@ -1,4 +1,5 @@
 import 'package:equipment_inventory/Components/textFormField.dart';
+import 'package:equipment_inventory/utilityMethods.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
@@ -34,7 +35,8 @@ class _HeadingState extends State<Heading> {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          spacing: 20,
+          spacing: 12,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Row(
@@ -66,7 +68,7 @@ class _HeadingState extends State<Heading> {
 
 
 
-            Text(widget.name,
+            Text(UtilityMethods.capitalizeEachWord(widget.name),
               style: TextStyle(
                   fontSize: 18,
                   color: AppColors.textSecondary
@@ -75,15 +77,19 @@ class _HeadingState extends State<Heading> {
 
 
 
-            AppInputField(
-              label: "Search",
+            Center(
+              child: AppInputField(
+                label: "Search",
                 radius: 1000.0,
                 borderStyle: BorderStyle.none,
                 controller: widget.searchController,
                 obscureText: false,
                 validator: (val){},
-                icon: AppIcon(icon: Symbols.search, weight: 300),
+                icon: AppIcon(icon: Symbols.search, weight: 300,size: 18,),
+                  fontSize: 14,
+                  verticalPadding: 4,
                 onChanged: (val){}
+              ),
             ),
           ],
         ),

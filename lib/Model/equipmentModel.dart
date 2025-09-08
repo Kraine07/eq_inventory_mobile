@@ -4,10 +4,12 @@
 import 'package:equipment_inventory/Model/locationModel.dart';
 import 'package:equipment_inventory/Model/modelModel.dart';
 
+import '../yearMonth.dart';
+
 class EquipmentModel{
   BigInt? id;
   String? serialNumber;
-  DateTime? manufacturedDate;
+  YearMonth? manufacturedDate;
   ModelModel? model;
   LocationModel? location;
 
@@ -34,7 +36,7 @@ class EquipmentModel{
     return EquipmentModel(
         id: BigInt.parse("+${json['id']}"),
         serialNumber: json['serialNumber'],
-        manufacturedDate: json['manufacturedDate'], // TODO revisit
+        manufacturedDate: json['manufacturedDate'] != null ? YearMonth.fromString(json['manufacturedDate']) : YearMonth(year: 0, month: 0),
         model: ModelModel.fromJson(json['model']),
         location: LocationModel.fromJson(json['location'])
     );

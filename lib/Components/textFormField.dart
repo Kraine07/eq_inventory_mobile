@@ -10,7 +10,9 @@ class AppInputField extends StatefulWidget {
   final Widget icon;
   BorderStyle borderStyle;
   double  radius;
+  double verticalPadding;
   TextInputType keyboard;
+  double fontSize;
 
   AppInputField({
     super.key,
@@ -22,6 +24,8 @@ class AppInputField extends StatefulWidget {
     required this.onChanged,
     this.borderStyle = BorderStyle.solid,
     this.radius = 8.0,
+    this.verticalPadding = 20.0,
+    this.fontSize = 16.0,
     this.keyboard = TextInputType.text
   }
   );
@@ -45,11 +49,13 @@ class _AppInputFieldState extends State<AppInputField> {
         validator: (val)=> widget.validator(val),
         onChanged: (val)=> widget.onChanged,
         controller: widget.controller,
-        style: const TextStyle(
-          fontSize: 16,
+        style: TextStyle(
+          letterSpacing: 2,
+          fontSize: widget.fontSize,
           color: AppColors.appWhite
         ),
         decoration:  InputDecoration(
+          contentPadding: EdgeInsets.symmetric(vertical: widget.verticalPadding),
           prefixIcon: widget.icon,
           labelText: widget.label,
           

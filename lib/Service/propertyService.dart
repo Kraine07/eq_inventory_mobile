@@ -22,10 +22,13 @@ class PropertyService extends APIService {
     if(response.body.isNotEmpty){
       List<dynamic> returnedList = jsonDecode(response.body);
       returnedList.forEach((item){
-        _propertyList.add(PropertyModel.fromJson(item));
-        _propertyList.sort((a, b) => a.name!.compareTo(b.name.toString()));
-        notifyListeners();
+        PropertyModel property = PropertyModel.fromJson(item);
+        if (!_propertyList.any((p) => p.id == property.id)) {
+          _propertyList.add(property);
+        }
       });
+      _propertyList.sort((a, b) => a.name!.compareTo(b.name.toString()));
+      notifyListeners();
     }
   }
 }
