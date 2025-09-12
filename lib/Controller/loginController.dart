@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:email_validator/email_validator.dart';
+import 'package:equipment_inventory/Components/updatePassword.dart';
 import 'package:equipment_inventory/Model/userModel.dart';
 import 'package:equipment_inventory/Service/userService.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -64,21 +66,29 @@ class _LoginControllerState extends State<LoginController> {
 
 
   // Sign in
-  void attemptLogin() async{
+  void attemptLogin(BuildContext context) async{
     UserService userService =  UserService();
 
     if (_formKey.currentState!.validate()) {
 
       final Response loginResponse = await userService.login(loginEndpoint, _emailController.text, _passwordController.text);
 
-      // check if a user was returned
-      if(loginResponse.body.isEmpty){
+      final Map<String,dynamic> responseBody = jsonDecode(loginResponse.body);
+
+
+      // check for login errors
+      if(responseBody.containsKey("error")){
+
+        final  String errorMessage = responseBody['error'];
+
+        // show error message
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
+              duration: Duration(seconds: 5),
               backgroundColor: AppColors.appBlue,
-              content: Text("User not found.",
+              content: Text(errorMessage ,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.accentColor,
                   fontWeight: FontWeight.bold
                 ),
@@ -86,9 +96,21 @@ class _LoginControllerState extends State<LoginController> {
             )
         );
       }
-      else {
-        final Map<String,dynamic> responseBody = jsonDecode(loginResponse.body);
 
+
+      // show update password form if password is temporary
+      else if(responseBody.containsKey("message")){
+        showCupertinoSheet(
+            context: context,
+            useNestedNavigation: true,
+            builder: (BuildContext sheetContext){
+              return UpdatePassword(sheetContext: sheetContext);
+            }
+        );
+      }
+
+
+      else {
         // Set AuthUser
         UserModel? authUser;
         authUser = UserModel.fromJson(responseBody);
@@ -110,7 +132,7 @@ class _LoginControllerState extends State<LoginController> {
     return  Center(
       child: ConstrainedBox(
           constraints: BoxConstraints(
-              maxWidth: 460
+              maxWidth: 480
           ),
           child: Form(
               key: _formKey,
@@ -182,7 +204,7 @@ class _LoginControllerState extends State<LoginController> {
                       SizedBox(
                         width: double.infinity,
                         child: OutlinedButton(
-                          onPressed: attemptLogin,
+                          onPressed: () => attemptLogin(context),
                           style: OutlinedButton.styleFrom(
                               padding: EdgeInsets.symmetric( vertical: 20),
                               backgroundColor: AppColors.appDarkBlue,

@@ -1,9 +1,13 @@
+import 'package:equipment_inventory/Components/icon.dart';
+import 'package:equipment_inventory/Components/propertySheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../Service/propertyService.dart';
 import '../theme.dart';
+import '../utilityMethods.dart';
 
 class PropertiesScreen extends StatefulWidget {
   const PropertiesScreen({super.key});
@@ -42,36 +46,9 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
             ),
 
             itemBuilder: (context, index){
-              return InkWell(
-                onTap: (){
-                  // show property sheet
-                  showCupertinoSheet(
-                    useNestedNavigation: true,
-                    context: context,
-                    builder: (BuildContext context){
-                      return Material(
-                        child: Container(
-                          child: Text(property.propertyList[index].name.toString().toUpperCase())),
-                      );
-                    }
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: AppColors.appLightBlue,
-                    borderRadius: BorderRadius.all(Radius.circular(8))
-                  ),
-                  child: Center(
-                    child: Text(
-                      property.propertyList[index].name.toString().toUpperCase(),
-                      style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 12
-                      ),
-                    ),
-                  ),
-                ),
+              return PropertySheet(
+                property: property,
+                index: index,
               );
             }
             );

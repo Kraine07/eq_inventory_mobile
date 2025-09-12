@@ -12,9 +12,13 @@ class LoadPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userService = Provider.of<UserService>(context, listen: false);
 
-    // check isLoggedIn variable to determine which page to load
-    // return Provider.of<UserService>(context, listen: false).isLoggedIn ? const Dashboard() : const LoginController();
-    return Dashboard();
+    return Scaffold(
+      body: userService.isLoggedIn
+          ? const Dashboard()
+          : const LoginController(),
+    );
   }
 }
+

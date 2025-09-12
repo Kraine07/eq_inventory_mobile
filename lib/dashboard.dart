@@ -37,30 +37,32 @@ class _DashboardState extends State<Dashboard> {
     return  DefaultTabController(
       length: 4,
       child: Scaffold(
-        body: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: 1200
-          ),
-          child: Container(
-            margin: EdgeInsets.symmetric(vertical: 5),
-            decoration: BoxDecoration(
-              color: AppColors.appBlue
+        body: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 960
             ),
-            child: Column(
-              children: [
-                Heading(searchController: _searchController,showIcon: false,name: "$lastName, $firstName",),
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 5),
+              decoration: BoxDecoration(
+                // color: AppColors.appBlue
+              ),
+              child: Column(
+                children: [
+                  Heading(searchController: _searchController,showIcon: false,name: "$lastName, $firstName",),
 
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      EquipmentScreen(),
-                      UsersScreen(),
-                      PropertiesScreen(),
-                      ReportsScreen(),
-                  ]),
-                ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        EquipmentScreen(),
+                        UsersScreen(),
+                        PropertiesScreen(),
+                        ReportsScreen(),
+                    ]),
+                  ),
 
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -1,6 +1,5 @@
 
 import 'package:equipment_inventory/Components/locationSheet.dart';
-import 'package:equipment_inventory/Model/equipmentModel.dart';
 import 'package:equipment_inventory/Service/equipmentService.dart';
 import 'package:equipment_inventory/theme.dart';
 import 'package:equipment_inventory/utilityMethods.dart';
@@ -8,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+
+import '../Components/icon.dart';
 
 class EquipmentScreen extends StatefulWidget {
   const EquipmentScreen({super.key});
@@ -35,7 +36,6 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
 
     return Consumer<EquipmentService>(
         builder: (context, eqService,child){
-          // final listByProperty = eqService.groupedByProperty.entries.toList();
           final byPropertyThenLocation = eqService.groupedByPropertyThenLocation;
           return ListView.builder(
             itemCount: byPropertyThenLocation.length,
@@ -47,7 +47,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: Material(
                     borderRadius: BorderRadius.circular(8),
-                    color: AppColors.appLightBlue,
+                    color: AppColors.appBlue,
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
@@ -57,11 +57,34 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                         children: [
 
                           //property name
-                          Text(
-                            byPropertyThenLocation.keys.elementAt(propertyIndex).toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w200
+                          Flexible(
+                            child: Row(
+                              spacing: 20,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    UtilityMethods.capitalizeEachWord(byPropertyThenLocation.keys.elementAt(propertyIndex)),
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w200
+                                    ),
+                                  ),
+                                ),
+
+                                Row(
+                                  spacing: 8,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    AppIcon(icon: Symbols.add_2_rounded, weight: 500,),
+                                    AppIcon(icon: Symbols.edit, weight: 200,color: AppColors.activeColor,),
+                                    AppIcon(icon: Symbols.delete, weight: 200,color: AppColors.inactiveColor,),
+
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
 
@@ -73,7 +96,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: byPropertyThenLocation.values.elementAt(propertyIndex).length,
                                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 320,
+                                  maxCrossAxisExtent: 280,
                                   mainAxisExtent: 100,
                                   mainAxisSpacing: 2,
                                   crossAxisSpacing: 4

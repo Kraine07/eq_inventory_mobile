@@ -47,49 +47,54 @@ class _LocationSheetState extends State<LocationSheet> {
 
 
                     // equipment at location
-                    return Container(
-                      margin: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: AppColors.appDarkBlue,
+                    return ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: 400
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          spacing: 8,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                      child: Container(
+                        margin: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: AppColors.appDarkBlue,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            spacing: 8,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
 
 
-                            // equipment info
-                            Text("${UtilityMethods.capitalizeEachWord(currentEquipment.model!.manufacturer.name.toString())} ${UtilityMethods.capitalizeEachWord(currentEquipment.model!.description.toString())}",
-                              // "${currentEquipment.model!.manufacturer.name!.toUpperCase()} ${currentEquipment.model!.description!.toUpperCase()}",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w200
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(currentEquipment.serialNumber?.toUpperCase() ?? "",
-                                  style: TextStyle(
-                                      letterSpacing: 2,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 16
-                                  ),
+                              // equipment info
+                              Text("${UtilityMethods.capitalizeEachWord(currentEquipment.model!.manufacturer.name.toString())} ${UtilityMethods.capitalizeEachWord(currentEquipment.model!.description.toString())}",
+                                // "${currentEquipment.model!.manufacturer.name!.toUpperCase()} ${currentEquipment.model!.description!.toUpperCase()}",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w200
                                 ),
-                                Text(currentEquipment.manufacturedDate.toString(),
-                                  style: TextStyle(
-                                      letterSpacing: 1,
-                                      fontWeight: FontWeight.w200,
-                                      fontStyle: FontStyle.italic
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(currentEquipment.serialNumber?.toUpperCase() ?? "",
+                                    style: TextStyle(
+                                        letterSpacing: 2,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 16
+                                    ),
                                   ),
-                                )
-                              ],
-                            )
-                          ],
+                                  Text(currentEquipment.manufacturedDate.toString(),
+                                    style: TextStyle(
+                                        letterSpacing: 1,
+                                        fontWeight: FontWeight.w200,
+                                        fontStyle: FontStyle.italic
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     );

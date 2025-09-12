@@ -27,7 +27,10 @@ class _UserListTileState extends State<UserListTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: widget.users.userList[widget.index].isSuspended?? true ? AppColors.appDarkBlue : AppColors.appLightBlue,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: widget.users.userList[widget.index].isSuspended?? true ? AppColors.appDarkBlue : AppColors.appBlue,
+      ),
       padding: EdgeInsets.symmetric(vertical: 12),
       child: ListTile(
         leading: widget.users.userList[widget.index].isSuspended?? true ? AppIcon(icon: Symbols.gpp_bad, weight: 300,size: 32, color: AppColors.textSecondary,) : AppIcon(icon: Symbols.verified_user, weight: 300,size: 32,),
@@ -35,13 +38,14 @@ class _UserListTileState extends State<UserListTile> {
         titleTextStyle: widget.users.userList[widget.index].isSuspended?? true ?
         TextStyle(
           decoration: TextDecoration.lineThrough,
-          color: AppColors.textSecondary,
+          color: AppColors.inactiveColor,
           fontStyle: FontStyle.italic,
           fontWeight: FontWeight.w300,
           fontSize: 24,
         )
             :
         TextStyle(
+          color: AppColors.activeColor,
           fontWeight: FontWeight.w300,
           fontSize: 24,
         ),

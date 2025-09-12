@@ -22,7 +22,7 @@ class PropertyModel{
     return {
       'id' : id.toString(),
       'name' : name,
-      'region' : region!.toJson(),
+      'region' : region.toJson(),
       'user' : user!.toJson()
     };
   }
