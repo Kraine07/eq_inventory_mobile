@@ -10,8 +10,15 @@ import 'icon.dart';
 class AppButton extends StatefulWidget {
 
   final Function() onPressed;
+  final String text;
+  final bool showIcon;
 
-  const AppButton({super.key, required this.onPressed});
+  AppButton({
+    super.key,
+    required this.onPressed,
+    this.text = "",
+    this.showIcon = true,
+  });
 
   @override
   State<AppButton> createState() => _AppButtonState();
@@ -20,34 +27,31 @@ class AppButton extends StatefulWidget {
 class _AppButtonState extends State<AppButton> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton(
-        onPressed: widget.onPressed,
-        style: OutlinedButton.styleFrom(
-            padding: EdgeInsets.symmetric( vertical: 20),
-            backgroundColor: AppColors.appDarkBlue,
-            foregroundColor: AppColors.appWhite,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)
-            ),
-            side: BorderSide(
-                color: AppColors.accentColor,
-                width: 1.0
-            )
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 10,
-          children: [
-            Text("Sign in"),
-            AppIcon(
-              icon: Symbols.chevron_right,
-              weight: 500,
-            ),
-          ],
-        ),
+    return OutlinedButton(
+      onPressed: widget.onPressed,
+      style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.all(20),
+          backgroundColor: AppColors.appDarkBlue,
+          foregroundColor: AppColors.appWhite,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0)
+          ),
+          side: BorderSide(
+              color: AppColors.accentColor,
+              width: 1.0
+          )
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 10,
+        children: [
+          Text(widget.text),
+          AppIcon(
+            icon: Symbols.chevron_right,
+            weight: 500,
+          ),
+        ],
       ),
     );
   }

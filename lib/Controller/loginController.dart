@@ -109,7 +109,6 @@ class _LoginControllerState extends State<LoginController> {
         );
       }
 
-
       else {
         // Set AuthUser
         UserModel? authUser;

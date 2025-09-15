@@ -19,6 +19,9 @@ class LoadPage extends StatelessWidget {
           ? const Dashboard()
           : const LoginController(),
     );
+    // return Dashboard();
+
+    // password for daffy duck = 1RGi!r!^y^nP
   }
 }
 

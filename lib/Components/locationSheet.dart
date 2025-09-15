@@ -1,3 +1,4 @@
+import 'package:equipment_inventory/Components/button.dart';
 import 'package:flutter/material.dart';
 
 import '../Model/equipmentModel.dart';
@@ -37,6 +38,11 @@ class _LocationSheetState extends State<LocationSheet> {
                   fontSize: 28,
                   fontWeight: FontWeight.w300
               ),
+            ),
+            Row(
+              children: [
+                AppButton(onPressed: (){}, text: "Place equipment",),
+              ],
             ),
             Expanded(
               child: ListView.builder(

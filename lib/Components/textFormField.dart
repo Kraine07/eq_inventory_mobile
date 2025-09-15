@@ -13,6 +13,7 @@ class AppInputField extends StatefulWidget {
   double verticalPadding;
   TextInputType keyboard;
   double fontSize;
+  bool readOnly;
 
   AppInputField({
     super.key,
@@ -26,7 +27,8 @@ class AppInputField extends StatefulWidget {
     this.radius = 8.0,
     this.verticalPadding = 20.0,
     this.fontSize = 16.0,
-    this.keyboard = TextInputType.text
+    this.keyboard = TextInputType.text,
+    this.readOnly = false
   }
   );
 
@@ -43,6 +45,7 @@ class _AppInputFieldState extends State<AppInputField> {
         selectionColor: AppColors.textSecondary
       ),
       child: TextFormField(
+        readOnly: widget.readOnly,
         keyboardType: widget.keyboard,
         cursorColor: AppColors.appWhite,
         obscureText: widget.obscureText,

@@ -38,8 +38,9 @@ class UserService extends APIService{
 
 
 
-  Future<Response> register(String endpoint, Map<String, dynamic> registrationModel) async {
-    return await this.post(endpoint: endpoint, data: registrationModel);
+  Future<Response> register({required String endpoint, String? params = null, required Map<String,
+      dynamic> registrationModel}) async {
+    return await this.post(endpoint: endpoint, data: registrationModel, params: {"role": params});
   }
 
 
