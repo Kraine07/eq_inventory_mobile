@@ -1,11 +1,13 @@
-import 'package:equipment_inventory/Components/button.dart';
+
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
 
 
 import '../Controller/registrationController.dart';
 import '../Model/roleType.dart';
 import '../Model/userModel.dart';
+import '../Service/userService.dart';
 import '../theme.dart';
 import '../utilityMethods.dart';
 import 'icon.dart';
@@ -16,9 +18,20 @@ class UserTile extends StatefulWidget {
 
   @override
   State<UserTile> createState() => _UserTileState();
+
 }
 
+
 class _UserTileState extends State<UserTile> {
+  late final UserModel? authUser;
+
+  @override
+  void initState() {
+    authUser = Provider.of<UserService>(context, listen: false).authUser;
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -122,92 +135,95 @@ class _UserTileState extends State<UserTile> {
                         Text(user.email ?? ""),
 
                         // action buttons
-                        Row(
-                          spacing: 24,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
+                        Visibility(
+                          visible: user.id != authUser!.id,
+                          child: Row(
+                            spacing: 24,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
 
-                            // suspend/activate button
-                            user.isSuspended ?? true ?
-                            AppIcon(icon: Symbols.check_circle, size: 36, weight: 200,color: AppColors.accentColor,):
-                            AppIcon(icon: Symbols.cancel, size: 36, weight: 200,color: AppColors.accentColor,),
+                              // suspend/activate button
+                              user.isSuspended ?? true ?
+                              AppIcon(icon: Symbols.check_circle, size: 36, weight: 200,color: AppColors.accentColor,):
+                              AppIcon(icon: Symbols.cancel, size: 36, weight: 200,color: AppColors.accentColor,),
 
-                            //edit button
-                            InkWell(
-                                onTap:(){
-                                  showBottomSheet(
-                                      constraints: BoxConstraints(
-                                          maxWidth: 960
-                                      ),
-                                      context: context,
-                                      builder: (BuildContext sheetContext) =>
-                                          RegistrationController(user: user,)
-                                  );
-                                },
-                                child: AppIcon(icon: Symbols.edit_square, size: 36, weight: 200,color: AppColors.activeColor,)
-                            ),
-
-                            //delete button
-                            InkWell(
-                              onTap: (){
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                    title: Text("Delete user?"),
-                                    content: Text(
-                                      "Are you sure you want to delete "
-                                          "${UtilityMethods.capitalizeEachWord("${user.firstName ?? ''} ${user.lastName ?? ''}")}?",
-                                    ),
-
-                                    actionsAlignment: MainAxisAlignment.spaceEvenly,
-
-                                    actions: [
-                                      TextButton(
-                                        onPressed: (){
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Cancel",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w200,
-                                          color: AppColors.appWhite
+                              //edit button
+                              InkWell(
+                                  onTap:(){
+                                    showBottomSheet(
+                                        constraints: BoxConstraints(
+                                            maxWidth: 960
                                         ),
-                                        ),
+                                        context: context,
+                                        builder: (BuildContext sheetContext) =>
+                                            RegistrationController(user: user,)
+                                    );
+                                  },
+                                  child: AppIcon(icon: Symbols.edit_square, size: 36, weight: 200,color: AppColors.activeColor,)
+                              ),
+
+                              //delete button
+                              InkWell(
+                                onTap: (){
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      title: Text("Delete user?"),
+                                      content: Text(
+                                        "Are you sure you want to delete "
+                                            "${UtilityMethods.capitalizeEachWord("${user.firstName ?? ''} ${user.lastName ?? ''}")}?",
                                       ),
 
+                                      actionsAlignment: MainAxisAlignment.spaceEvenly,
 
-                                      TextButton(
-                                        style: ButtonStyle(
-                                          shape: WidgetStatePropertyAll<OutlinedBorder>(RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(6),
-                                          )),
-                                          backgroundColor: WidgetStatePropertyAll<Color>(AppColors.accentColor),
-                                          foregroundColor: WidgetStatePropertyAll<Color>(AppColors.appDarkBlue),
-                                          padding: WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 36, vertical: 12)),
-                                        ),
-                                        onPressed: (){
-
-                                          //TODO: interact with backend to delete user
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Yes",
+                                      actions: [
+                                        TextButton(
+                                          onPressed: (){
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Cancel",
                                           style: TextStyle(
                                             fontSize: 20,
-                                            fontWeight: FontWeight.w600,
-                                            // color: AppColors.appWhite
+                                            fontWeight: FontWeight.w200,
+                                            color: AppColors.appWhite
+                                          ),
                                           ),
                                         ),
-                                      ),
 
-                                    ],
 
-                                  )
+                                        TextButton(
+                                          style: ButtonStyle(
+                                            shape: WidgetStatePropertyAll<OutlinedBorder>(RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(6),
+                                            )),
+                                            backgroundColor: WidgetStatePropertyAll<Color>(AppColors.accentColor),
+                                            foregroundColor: WidgetStatePropertyAll<Color>(AppColors.appDarkBlue),
+                                            padding: WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 36, vertical: 12)),
+                                          ),
+                                          onPressed: (){
 
-                                );
-                              },
-                                child: AppIcon(icon: Symbols.delete, size: 36, weight: 200,color: AppColors.inactiveColor,)
-                            )
-                          ],
+                                            //TODO: interact with backend to delete user
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Yes",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600,
+                                              // color: AppColors.appWhite
+                                            ),
+                                          ),
+                                        ),
+
+                                      ],
+
+                                    )
+
+                                  );
+                                },
+                                  child: AppIcon(icon: Symbols.delete, size: 36, weight: 200,color: AppColors.inactiveColor,)
+                              )
+                            ],
+                          ),
                         )
                       ],
                     )

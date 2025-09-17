@@ -1,6 +1,5 @@
 
 import 'package:equipment_inventory/Components/heading.dart';
-import 'package:equipment_inventory/Components/icon.dart';
 import 'package:equipment_inventory/DashboardScreens/equipmentScreen.dart';
 import 'package:equipment_inventory/DashboardScreens/propertiesScreen.dart';
 import 'package:equipment_inventory/DashboardScreens/reportsScreen.dart';
@@ -35,7 +34,7 @@ class _DashboardState extends State<Dashboard> {
      String? lastName = authUser?.lastName?.toUpperCase();
 
     return  DefaultTabController(
-      length: 4,
+      length: Provider.of<UserService>(context).authUser!.isAdmin?? false? 4: 2,
       child: Scaffold(
         body: Center(
           child: ConstrainedBox(
@@ -55,8 +54,8 @@ class _DashboardState extends State<Dashboard> {
                     child: TabBarView(
                       children: [
                         EquipmentScreen(),
-                        UsersScreen(),
-                        PropertiesScreen(),
+                        if (Provider.of<UserService>(context).authUser!.isAdmin?? false) UsersScreen(),
+                        if (Provider.of<UserService>(context).authUser!.isAdmin?? false) PropertiesScreen(),
                         ReportsScreen(),
                     ]),
                   ),
@@ -87,11 +86,11 @@ class _DashboardState extends State<Dashboard> {
                 text: "Equipment",
                 icon: Icon(Symbols.kitchen),
               ),
-              Tab(
+              if (Provider.of<UserService>(context).authUser!.isAdmin?? false) Tab(
                 text: "Users",
                 icon: Icon(Symbols.group),
               ),
-              Tab(
+              if (Provider.of<UserService>(context).authUser!.isAdmin?? false) Tab(
                 text: "Properties",
                 icon: Icon(Symbols.apartment),
               ),

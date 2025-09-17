@@ -1,14 +1,15 @@
 
-import 'package:equipment_inventory/Components/locationSheet.dart';
+
 import 'package:equipment_inventory/Service/equipmentService.dart';
 import 'package:equipment_inventory/theme.dart';
 import 'package:equipment_inventory/utilityMethods.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
+
 import 'package:provider/provider.dart';
 
-import '../Components/icon.dart';
+import '../Model/locationModel.dart';
+import '../Service/propertyService.dart';
+import '../Service/userService.dart';
 
 class EquipmentScreen extends StatefulWidget {
   const EquipmentScreen({super.key});
@@ -20,12 +21,14 @@ class EquipmentScreen extends StatefulWidget {
 
 class _EquipmentScreenState extends State<EquipmentScreen> {
 
+
   @override
   void initState() {
 
     super.initState();
     Future.microtask(() => {
-      Provider.of<EquipmentService>(context, listen: false).retrieveList()
+      Provider.of<EquipmentService>(context, listen: false).retrieveList(),
+      Provider.of<PropertyService>(context, listen: false).retrieveList()
     });
   }
 
@@ -33,132 +36,94 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
   @override
   Widget build(BuildContext context) {
 
+    final authUser = Provider.of<UserService>(context).authUser;
+    final propertyList = Provider.of<PropertyService>(context).propertyList;
 
     return Consumer<EquipmentService>(
-        builder: (context, eqService,child){
-          final byPropertyThenLocation = eqService.groupedByPropertyThenLocation;
-          return ListView.builder(
-            itemCount: byPropertyThenLocation.length,
-              itemBuilder: (context, propertyIndex){
+      builder: (context, eqService,child){
+
+        final equipmentList = eqService.equipmentList;
+
+        return SingleChildScrollView(
+          child:  ExpansionPanelList.radio(
+            elevation: 0,
+            dividerColor: AppColors.borderColor,
+            expandedHeaderPadding: EdgeInsets.symmetric(vertical: 20),
+            materialGapSize: 20,
+            children: propertyList.where((property) => (authUser?.isAdmin ?? false || property.user?.id == authUser?.id) && equipmentList.any((eq) => eq.location?.property?.id == property.id) ).map((property) {
 
 
-              // properties
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Material(
-                    borderRadius: BorderRadius.circular(8),
-                    color: AppColors.appBlue,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 8,
-                        children: [
 
-                          //property name
-                          Flexible(
-                            child: Row(
-                              spacing: 20,
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    UtilityMethods.capitalizeEachWord(byPropertyThenLocation.keys.elementAt(propertyIndex)),
-                                    softWrap: true,
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w200
-                                    ),
-                                  ),
-                                ),
+              // create a set of locations for this property
+              Set<LocationModel> locations = Set();
 
-                                Row(
-                                  spacing: 8,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    AppIcon(icon: Symbols.add_2_rounded, weight: 500,),
-                                    AppIcon(icon: Symbols.edit, weight: 200,color: AppColors.activeColor,),
-                                    AppIcon(icon: Symbols.delete, weight: 200,color: AppColors.inactiveColor,),
+              equipmentList.forEach((eq) {
+                if (eq.location?.property?.id == property.id && !locations.contains(eq.location)) {
+                  locations.add(eq.location!);
+                }
+              });
 
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
+              return ExpansionPanelRadio(
+                canTapOnHeader: true,
+                backgroundColor: AppColors.appDarkBlue,
+                value: propertyList.indexOf(property),
+                headerBuilder: (BuildContext context, bool isExpanded) => Padding(
+                  padding: const EdgeInsets.all(20.0),
+
+                  // property name
+                  child:  Text(UtilityMethods.capitalizeEachWord(property.name??"",)),
+                ),
 
 
-                          // List of locations
-                          Flexible(
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: byPropertyThenLocation.values.elementAt(propertyIndex).length,
-                                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 280,
-                                  mainAxisExtent: 100,
-                                  mainAxisSpacing: 2,
-                                  crossAxisSpacing: 4
-                                ),
-                                itemBuilder: (context, locationIndex){
+                body: GridView.builder(
+                  padding: EdgeInsets.all(20),
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: locations.length,
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      mainAxisExtent: 60,
+                      maxCrossAxisExtent: 210,
+                      childAspectRatio: 2 / 1,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20
+                    ), 
+                    
+                    itemBuilder: (context, index){
 
 
-                                  return InkWell(
-                                    onTap: (){
-                                      showCupertinoSheet(
-                                        enableDrag: true,
-                                        useNestedNavigation: true,
-                                        context: context,
-                                        builder: (context){
 
 
-                                          // location sheet
-                                          return LocationSheet(
-                                            locationIndex: locationIndex,
-                                            propertyIndex: propertyIndex,
-                                            byPropertyThenLocation: byPropertyThenLocation,
-                                          );
+                      return Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.appLightBlue,
+                          borderRadius: BorderRadius.circular(12)
+                        ),
 
-                                        }
-                                      );
-                                    },
 
-                                    // location name
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: AppColors.appDarkBlue,
-                                        borderRadius: BorderRadius.circular(8)
-                                      ),
 
-                                      padding: EdgeInsets.all(12),
-                                        margin: EdgeInsets.all(12),
-                                        child: Center(
+                        // location name
+                          child: Center(
+                            child: Text(UtilityMethods.capitalizeEachWord(locations.elementAt(index).name??"",),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
 
-                                          // location name
-                                            child: Text(
-                                              textAlign: TextAlign.center,
-                                              UtilityMethods.capitalizeEachWord(byPropertyThenLocation.values.elementAt(propertyIndex).keys.elementAt(locationIndex)),
-                                              style: TextStyle(
-                                                fontSize: 14
-                                              ),
-                                          )
-                                        )
-                                    ),
-                                  );
-                                },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-          );
-        }
+                              ),
+                            )
+                          )
+                      );
+                    }
+                ),
+              );
+
+            }).toSet().toList(),
+
+
+          )
+        );
+      }
     );
-
-
   }
 }

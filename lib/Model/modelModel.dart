@@ -21,4 +21,19 @@ class ModelModel {
         description: json['description']
     );
   }
+
+
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is ModelModel &&
+              runtimeType == other.runtimeType &&
+              manufacturer.id == other.manufacturer.id && // Assuming PropertyModel has `id`
+              description == other.description;
+
+  @override
+  int get hashCode => Object.hash(manufacturer.id, description);
+
+
 }

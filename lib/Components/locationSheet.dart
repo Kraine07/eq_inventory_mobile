@@ -2,21 +2,26 @@ import 'package:equipment_inventory/Components/button.dart';
 import 'package:flutter/material.dart';
 
 import '../Model/equipmentModel.dart';
+import '../Model/locationModel.dart';
 import '../theme.dart';
 import '../utilityMethods.dart';
 
+
+
+
 class LocationSheet extends StatefulWidget {
 
+  final List<LocationModel?> locationList;
+  final List<EquipmentModel> equipmentList;
+
   final int locationIndex;
-  final int propertyIndex;
-  final Map<String, Map<String, List<EquipmentModel>>> byPropertyThenLocation;
 
 
   LocationSheet({
     super.key,
+    required this.locationList,
     required this.locationIndex,
-    required this.propertyIndex,
-    required this.byPropertyThenLocation
+    required this.equipmentList,
   });
 
 
@@ -33,7 +38,8 @@ class _LocationSheetState extends State<LocationSheet> {
         child: Column(
           spacing: 20,
           children: [
-            Text(widget.byPropertyThenLocation.values.elementAt(widget.propertyIndex).keys.elementAt(widget.locationIndex).toUpperCase(),
+            Text(widget.locationList[widget.locationIndex]!.name!.toUpperCase(),
+            // Text(widget.byPropertyThenLocation.values.elementAt(widget.propertyIndex).keys.elementAt(widget.locationIndex)!.name!.toUpperCase(),
               style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w300
@@ -46,10 +52,12 @@ class _LocationSheetState extends State<LocationSheet> {
             ),
             Expanded(
               child: ListView.builder(
-                  itemCount: widget.byPropertyThenLocation.values.elementAt(widget.propertyIndex).values.elementAt(widget.locationIndex).length,
+                  itemCount: widget.equipmentList.length,
+                  // itemCount: widget.byPropertyThenLocation.values.elementAt(widget.propertyIndex).values.elementAt(widget.locationIndex).length,
 
                   itemBuilder: (context, gIndex) {
-                    EquipmentModel currentEquipment = widget.byPropertyThenLocation.values.elementAt(widget.propertyIndex).values.elementAt(widget.locationIndex).elementAt(gIndex);
+                    EquipmentModel currentEquipment = widget.equipmentList[gIndex];
+                    // EquipmentModel currentEquipment = widget.byPropertyThenLocation.values.elementAt(widget.propertyIndex).values.elementAt(widget.locationIndex).elementAt(gIndex);
 
 
                     // equipment at location
