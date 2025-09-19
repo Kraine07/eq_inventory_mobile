@@ -78,6 +78,7 @@ class _RegistrationControllerState extends State<RegistrationController> {
       if (value == null || value.isEmpty) {
         return "This field is required.";
       }
+      return null;
     }
 
     return Center(

@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 
 class AppColors{
   static const Color appDarkBlue = Color(0xFF041C32);
+  static const Color appDarkBlue40 = Color(0x66041C32);
   static const Color appBlue = Color(0xFF04293A);
   static const Color appLightBlue = Color(0xFF064663);
+  static const Color appLightBlue40 = Color(0x66064663);
   static const Color accentColor = Color(0xFFECB365);
+  static const Color accentColor40 = Color(0x66ECB365);
   static const Color appWhite = Color(0xFFD7D7D7);
   static const Color borderColor = Color(0xFF616161);
   static const Color textSecondary = Color(0xFF777777);
@@ -48,5 +51,11 @@ final ThemeData appTheme = ThemeData(
   ),
 
 
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      foregroundColor: AppColors.appWhite,
+    ),
+  ),
 
 );

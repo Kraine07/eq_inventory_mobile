@@ -49,10 +49,10 @@ class UserService extends APIService{
     if(response.body.isNotEmpty) {
       List<dynamic> returnedList = jsonDecode(response.body);
       returnedList.forEach((item) {
-        UserModel user = UserModel.fromJson(item);
+        UserModel returnedUser = UserModel.fromJson(item);
         // check for duplicates
-        if (!_userList.any((p) => p.id == user.id)) {
-          _userList.add(user);
+        if (!_userList.any((userFromUserList) => userFromUserList.id == returnedUser.id)) {
+          _userList.add(returnedUser);
         }
       });
 

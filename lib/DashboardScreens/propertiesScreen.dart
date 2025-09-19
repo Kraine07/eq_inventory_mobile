@@ -24,7 +24,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   void initState() {
     super.initState();
     Future.microtask(() => {
-      Provider.of<PropertyService>(context, listen: false).retrieveList()
+      Provider.of<PropertyService>(context, listen: false).retrievePropertyList()
     });
   }
 

@@ -1,9 +1,13 @@
 
 
+import 'package:equipment_inventory/Components/equipmentForm.dart';
+import 'package:equipment_inventory/Components/icon.dart';
+import 'package:equipment_inventory/Components/locationsAtProperty.dart';
 import 'package:equipment_inventory/Service/equipmentService.dart';
 import 'package:equipment_inventory/theme.dart';
 import 'package:equipment_inventory/utilityMethods.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import 'package:provider/provider.dart';
 
@@ -28,7 +32,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
     super.initState();
     Future.microtask(() => {
       Provider.of<EquipmentService>(context, listen: false).retrieveList(),
-      Provider.of<PropertyService>(context, listen: false).retrieveList()
+      Provider.of<PropertyService>(context, listen: false).retrievePropertyList()
     });
   }
 
@@ -44,84 +48,91 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
 
         final equipmentList = eqService.equipmentList;
 
-        return SingleChildScrollView(
-          child:  ExpansionPanelList.radio(
-            elevation: 0,
-            dividerColor: AppColors.borderColor,
-            expandedHeaderPadding: EdgeInsets.symmetric(vertical: 20),
-            materialGapSize: 20,
-            children: propertyList.where((property) => (authUser?.isAdmin ?? false || property.user?.id == authUser?.id) && equipmentList.any((eq) => eq.location?.property?.id == property.id) ).map((property) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child:  Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
 
+                // add equipment button
+                InkWell(
+                  onTap: (){
+                    showBottomSheet(
+                      constraints: BoxConstraints(
+                        maxWidth: 960,
+                        minHeight: MediaQuery.of(context).size.height *.7
+                      ),
+                      context: context,
+                      builder: (BuildContext sheetContext){
+                        return Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: EquipmentForm(propertyList: propertyList),
+                        );
+                      }
+                    );
 
-
-              // create a set of locations for this property
-              Set<LocationModel> locations = Set();
-
-              equipmentList.forEach((eq) {
-                if (eq.location?.property?.id == property.id && !locations.contains(eq.location)) {
-                  locations.add(eq.location!);
-                }
-              });
-
-              return ExpansionPanelRadio(
-                canTapOnHeader: true,
-                backgroundColor: AppColors.appDarkBlue,
-                value: propertyList.indexOf(property),
-                headerBuilder: (BuildContext context, bool isExpanded) => Padding(
-                  padding: const EdgeInsets.all(20.0),
-
-                  // property name
-                  child:  Text(UtilityMethods.capitalizeEachWord(property.name??"",)),
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    decoration: BoxDecoration(
+                        color: AppColors.appDarkBlue40,
+                        borderRadius: BorderRadius.circular(8)
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppIcon(icon: Symbols.add, weight: 300),
+                        Text("Add equipment")
+                      ],
+                    ),
+                  ),
                 ),
 
 
-                body: GridView.builder(
-                  padding: EdgeInsets.all(20),
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: locations.length,
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      mainAxisExtent: 60,
-                      maxCrossAxisExtent: 210,
-                      childAspectRatio: 2 / 1,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20
-                    ), 
-                    
-                    itemBuilder: (context, index){
+
+                // property list
+                ExpansionPanelList.radio(
+                  elevation: 0,
+                  dividerColor: AppColors.borderColor,
+                  expandedHeaderPadding: EdgeInsets.symmetric(vertical: 20),
+                  materialGapSize: 20,
+                  children: propertyList.where((property) => (authUser?.isAdmin ?? false || property.user?.id == authUser?.id) && equipmentList.any((eq) => eq.location?.property?.id == property.id) ).map((property) {
 
 
 
+                    // create a set of locations for this property
+                    Set<LocationModel> locations = Set();
 
-                      return Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppColors.appLightBlue,
-                          borderRadius: BorderRadius.circular(12)
-                        ),
+                    equipmentList.forEach((eq) {
+                      if (eq.location?.property?.id == property.id && !locations.contains(eq.location)) {
+                        locations.add(eq.location!);
+                      }
+                    });
+
+                    return ExpansionPanelRadio(
+                      canTapOnHeader: true,
+                      backgroundColor: AppColors.appDarkBlue40,
+                      value: propertyList.indexOf(property),
+                      headerBuilder: (BuildContext context, bool isExpanded) => Padding(
+                        padding: const EdgeInsets.all(20.0),
+
+                        // property name
+                        child:  Text(UtilityMethods.capitalizeEachWord(property.name??"",)),
+                      ),
 
 
+                      body: LocationsAtProperty(locations: locations, context: context,equipmentList: equipmentList,),
+                    );
 
-                        // location name
-                          child: Center(
-                            child: Text(UtilityMethods.capitalizeEachWord(locations.elementAt(index).name??"",),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w300,
+                  }).toSet().toList(),
 
-                              ),
-                            )
-                          )
-                      );
-                    }
+
                 ),
-              );
-
-            }).toSet().toList(),
-
-
-          )
+              ],
+            )
+          ),
         );
       }
     );

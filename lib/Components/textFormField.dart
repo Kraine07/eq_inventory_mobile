@@ -8,12 +8,12 @@ class AppInputField extends StatefulWidget {
   final Function(String?) validator;
   final Function(bool?) onChanged;
   final Widget icon;
-  BorderStyle borderStyle;
-  double  radius;
-  double verticalPadding;
-  TextInputType keyboard;
-  double fontSize;
-  bool readOnly;
+  final BorderStyle borderStyle;
+  final double  radius;
+  final double verticalPadding;
+  final TextInputType keyboard;
+  final double fontSize;
+  final bool readOnly;
 
   AppInputField({
     super.key,
@@ -29,8 +29,7 @@ class AppInputField extends StatefulWidget {
     this.fontSize = 16.0,
     this.keyboard = TextInputType.text,
     this.readOnly = false
-  }
-  );
+  });
 
 
   @override
