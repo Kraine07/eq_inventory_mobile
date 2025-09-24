@@ -59,7 +59,9 @@ class PropertyService extends APIService {
       List<dynamic> returnedList = jsonDecode(response.body);
       returnedList.forEach((item){
         LocationModel returnedLocation = LocationModel.fromJson(item);
-        if (!_locationList.any((locationFromList) => returnedLocation.property?.id == locationFromList.property?.id  && returnedLocation.name == locationFromList.name )) {
+        if (!_locationList.any((locationFromList) =>
+        returnedLocation.property?.id == locationFromList.property?.id  &&
+            returnedLocation.name == locationFromList.name )) {
           _locationList.add(returnedLocation);
         }
       });

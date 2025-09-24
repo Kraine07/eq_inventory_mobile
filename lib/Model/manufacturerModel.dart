@@ -17,7 +17,7 @@ class ManufacturerModel{
 
   factory ManufacturerModel.fromJson(Map<String, dynamic> json){
     return ManufacturerModel(
-        id: BigInt.parse("+${json['id']}"),
+        id: json['id'] != null ? BigInt.parse("+${json['id']}") : null,
         name: json['name']
     );
   }

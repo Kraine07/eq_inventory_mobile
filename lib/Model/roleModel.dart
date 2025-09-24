@@ -16,14 +16,14 @@ class RoleModel{
   Map<String, dynamic> toJson(){
     return {
       'id' : id.toString(),
-      'roleType' : roleType
+      'roleType' : roleType?.name
     };
   }
 
 
   factory RoleModel.fromJson(Map<String, dynamic> json){
     return RoleModel(
-        id: BigInt.parse("+${json['id']}"),
+        id: json['id'] != null ? BigInt.parse("+${json['id']}") : null,
         roleType: json['roleType'] != null ?
           RoleType.values.firstWhere( (e) => e.name == json['roleType'] ) : null,
     );

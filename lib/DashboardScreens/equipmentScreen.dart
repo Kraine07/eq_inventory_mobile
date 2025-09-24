@@ -60,14 +60,15 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                   onTap: (){
                     showBottomSheet(
                       constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height *.7,
                         maxWidth: 960,
-                        minHeight: MediaQuery.of(context).size.height *.7
+                        minHeight: MediaQuery.of(context).size.height *.5
                       ),
                       context: context,
                       builder: (BuildContext sheetContext){
                         return Padding(
                           padding: const EdgeInsets.all(20),
-                          child: EquipmentForm(propertyList: propertyList),
+                          child: EquipmentForm(),
                         );
                       }
                     );

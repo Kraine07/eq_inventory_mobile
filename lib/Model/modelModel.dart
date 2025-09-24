@@ -10,7 +10,7 @@ class ModelModel {
 
   Map<String, dynamic> toJson(){
     return {
-      'id': manufacturer.toJson(),
+      'manufacturer': manufacturer.toJson(),
       'description': description
     };
   }

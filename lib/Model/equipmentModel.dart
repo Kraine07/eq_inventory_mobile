@@ -21,6 +21,8 @@ class EquipmentModel{
     required this.location
   });
 
+
+
   Map<String, dynamic> toJson(){
     return {
       'id': id.toString(),
@@ -34,7 +36,7 @@ class EquipmentModel{
 
   factory EquipmentModel.fromJson(Map<String, dynamic> json){
     return EquipmentModel(
-        id: BigInt.parse("+${json['id']}"),
+        id: json['id'] != null ? BigInt.parse("+${json['id']}") : null,
         serialNumber: json['serialNumber'],
         manufacturedDate: json['manufacturedDate'] != null ? YearMonth.fromString(json['manufacturedDate']) : YearMonth(year: 0, month: 0),
         model: ModelModel.fromJson(json['model']),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'Service/equipmentService.dart';
+import 'Service/manufacturerService.dart';
 import 'Service/propertyService.dart';
 import 'Service/userService.dart';
 import 'loadPage.dart';
@@ -17,6 +18,7 @@ void main() {
           ChangeNotifierProvider(create: (_)=>UserService()),
           ChangeNotifierProvider(create: (_)=>EquipmentService()),
           ChangeNotifierProvider(create: (_)=>PropertyService()),
+          ChangeNotifierProvider(create: (_)=>ManufacturerService()),
         ],
       child: const MainApp(),
     )

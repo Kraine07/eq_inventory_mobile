@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../Components/icon.dart';
 import '../Components/textFormField.dart';
 import '../loadPage.dart';
+import '../messageHandler.dart';
 import '../theme.dart';
 
 class LoginController extends StatefulWidget {
@@ -71,7 +72,17 @@ class _LoginControllerState extends State<LoginController> {
 
     if (_formKey.currentState!.validate()) {
 
+      // show loading dialog
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context){
+            return Center(child: CircularProgressIndicator());
+          }
+      );
       final Response loginResponse = await userService.login(loginEndpoint, _emailController.text, _passwordController.text);
+
+      Navigator.pop(context);
 
       final Map<String,dynamic> responseBody = jsonDecode(loginResponse.body);
 
@@ -82,19 +93,7 @@ class _LoginControllerState extends State<LoginController> {
         final  String errorMessage = responseBody['error'];
 
         // show error message
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              duration: Duration(seconds: 5),
-              backgroundColor: AppColors.appBlue,
-              content: Text(errorMessage ,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: AppColors.accentColor,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-            )
-        );
+        MessageHandler.showMessage(context, errorMessage, false);
       }
 
 

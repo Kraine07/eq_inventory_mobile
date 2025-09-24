@@ -30,7 +30,7 @@ class PropertyModel{
 
   factory PropertyModel.fromJson(Map<String, dynamic> json){
     return PropertyModel(
-        id: BigInt.parse("+${json['id']}"),
+        id: json['id'] != null ? BigInt.parse("+${json['id']}") : null,
         name: json['name'],
         region: RegionModel.fromJson(json['region']),
         user: UserModel.fromJson(json['user'])

@@ -2,6 +2,9 @@
 
 class UtilityMethods {
 
+
+
+
 // To capitalize the first letter and make the rest lowercase:
   static String capitalizeFirstLetterOnly(String s) {
     if (s.isEmpty) {
@@ -9,6 +12,11 @@ class UtilityMethods {
     }
     return "${s[0].toUpperCase()}${s.substring(1).toLowerCase()}";
   }
+
+
+
+
+
 
   static String capitalizeEachWord(String text) {
     if (text.isEmpty) {

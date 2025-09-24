@@ -1,13 +1,23 @@
+import 'dart:convert';
+
+import 'package:equipment_inventory/Components/equipmentForm.dart';
 import 'package:equipment_inventory/Components/icon.dart';
 import 'package:equipment_inventory/Model/equipmentModel.dart';
+import 'package:equipment_inventory/loadPage.dart';
+import 'package:equipment_inventory/messageHandler.dart';
 import 'package:equipment_inventory/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
 
+import '../Service/equipmentService.dart';
 import '../utilityMethods.dart';
 
 class EquipmentTile extends StatefulWidget {
   final EquipmentModel equipment;
+  
+  
   const EquipmentTile({
     super.key, 
     required this.equipment
@@ -18,8 +28,14 @@ class EquipmentTile extends StatefulWidget {
 }
 
 class _EquipmentTileState extends State<EquipmentTile> {
+
+
   @override
   Widget build(BuildContext context) {
+
+    EquipmentService equipmentService = Provider.of<EquipmentService>(context, listen: false);
+
+
     return ConstrainedBox(
       constraints: BoxConstraints(
         minWidth: MediaQuery.of(context).size.width,
@@ -31,56 +47,105 @@ class _EquipmentTileState extends State<EquipmentTile> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
-            spacing: 8,
+            spacing: 20,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
 
-              // edit button
               Material(
                 color: Colors.transparent,
                 textStyle: TextStyle(
                   fontSize: 12
                 ),
                 child: Row(
-                  spacing: 12,
+                  spacing: 20,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        color: AppColors.appDarkBlue40
-                      ),
-                      padding: EdgeInsets.all(12),
 
-                      child: Row(
-                        spacing: 12,
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          AppIcon(icon: Symbols.edit, weight: 500,size: 16,),
-                          Text("Edit")
-                        ],
+                    // edit button
+                    InkWell(
+                      onTap: (){
+                        showBottomSheet(
+                            context: context,
+                            builder: (context){
+                              return EquipmentForm(equipment: widget.equipment, isEditing: true,);
+                            }
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          color: AppColors.appDarkBlue40
+                        ),
+                        padding: EdgeInsets.all(12),
+
+                        child: AppIcon(icon: Symbols.edit, weight: 500,size: 16,),
                       ),
                     ),
 
 
-                    // delete button
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        color: AppColors.accentColor40
-                      ),
-                      padding: EdgeInsets.all(12),
 
-                      child: Row(
-                        spacing: 12,
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          AppIcon(icon: Symbols.delete, weight: 500,size: 16,),
-                          Text("Delete")
-                        ],
+
+
+                    // delete button
+                    InkWell(
+                      onTap: (){
+                        showDialog(
+                            context: context,
+                            builder: (context){
+                              
+                              // delete confirmation dialog
+                              return AlertDialog(
+                                title: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  spacing: 12,
+                                  children: [
+                                    AppIcon(icon: Symbols.warning, weight: 300),
+                                    Text("Delete Equipment"),
+                                  ],
+                                ),
+                                content: Text("Are you sure you want to delete this equipment?"),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      }, 
+                                      child: AppIcon(icon: Symbols.close, weight: 500)),
+
+                                  TextButton(
+                                      onPressed: () async{
+                                        Response deleteResponse = await equipmentService.post(endpoint: "api/v1/delete-equipment/${widget.equipment.id}", data: {});
+                                        if(deleteResponse.statusCode == 200){
+
+
+                                          MessageHandler.showMessage(context, "Equipment deleted successfully", true);
+                                        }
+                                        else{
+                                          MessageHandler.showMessage(context, "Error deleting equipment", false);
+                                        }
+
+                                        equipmentService.retrieveList();
+                                        Navigator.push(
+                                            context, MaterialPageRoute(builder: (context){
+                                          return LoadPage();
+                                        }));
+                                      }, 
+                                      child: AppIcon(icon: Symbols.check, weight: 500, ))
+                                ],
+
+                              );
+                            }
+
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          color: AppColors.accentColor40
+                        ),
+                        padding: EdgeInsets.all(12),
+
+                        child: AppIcon(icon: Symbols.delete, weight: 500,size: 16,),
                       ),
                     ),
                   ],

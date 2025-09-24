@@ -21,7 +21,7 @@ class RegionModel {
 
   factory RegionModel.fromJson(Map<String, dynamic> json){
     return RegionModel(
-        id: BigInt.parse("+${json['id']}"),
+        id: json['id'] != null ? BigInt.parse("+${json['id']}") : null,
         name: json['name']
     );
   }

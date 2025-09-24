@@ -1,9 +1,9 @@
+import 'package:equipment_inventory/Components/equipmentForm.dart';
 import 'package:equipment_inventory/Components/equipmentTile.dart';
 import 'package:equipment_inventory/Components/icon.dart';
 import 'package:equipment_inventory/Model/equipmentModel.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-
 import '../theme.dart';
 import '../utilityMethods.dart';
 
@@ -55,49 +55,61 @@ class _LocationsAtPropertyState extends State<LocationsAtProperty> {
                 ),
                   context: widget.context,
                   builder: (BuildContext sheetContext){
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 12,
-                      children: [
-                        Text("${UtilityMethods.capitalizeEachWord(widget.locations.elementAt(index).name ?? "",)}",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w200,
-                            )
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                          decoration: BoxDecoration(
-                              color: AppColors.appDarkBlue40,
-                              borderRadius: BorderRadius.circular(8)
+                    return SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 12,
+                        children: [
+                          Text("${UtilityMethods.capitalizeEachWord(widget.locations.elementAt(index).name ?? "",)}",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w200,
+                              )
                           ),
-                          child: Row(
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                            decoration: BoxDecoration(
+                                color: AppColors.appDarkBlue40,
+                                borderRadius: BorderRadius.circular(8)
+                            ),
+                            child: InkWell(
+                              onTap: (){
+                                showBottomSheet(
+                                    context: context,
+                                    builder: (BuildContext ctx){
+                                      return EquipmentForm(fromLocation: true, selectedLocation: widget.locations.elementAt(index),);
+                                    }
+                                );
+                              },
+                              child: Row(
+                                spacing: 4,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  AppIcon(icon: Symbols.place_item, weight: 300),
+                                  Text("Place equipment")
+                                ],
+                              ),
+                            ),
+                          ),
+                      
+                      
+                          Column(
                             spacing: 4,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
-                            children: [
-                              AppIcon(icon: Symbols.add, weight: 300),
-                              Text("Place equipment here")
-                            ],
+                            children: widget.equipmentList
+                                .where((eq) => eq.location == widget.locations.elementAt(index))
+                                .map((eq) => Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: EquipmentTile(equipment: eq),
+                            ))
+                                .toList(),
+
                           ),
-                        ),
-
-
-                        Column(
-                          spacing: 4,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: widget.equipmentList
-                              .where((eq) => eq.location == widget.locations.elementAt(index))
-                              .map((eq) => Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: EquipmentTile(equipment: eq),
-                          ))
-                              .toList(),
-
-                        ),
-                      ],
+                        ],
+                      ),
                     );
                   });
             },

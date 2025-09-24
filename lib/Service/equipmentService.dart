@@ -26,16 +26,18 @@ class EquipmentService extends APIService{
 
 
 
-
-
   void retrieveList() async {
     Response response = await this.get("api/v1/get-all-equipment-dto", {});
 
     if(response.body.isNotEmpty){
       List<dynamic> returnedList = jsonDecode(response.body);
 
+      _equipmentList.clear();
+
       returnedList.forEach((item){
         EquipmentModel equipment = EquipmentModel.fromJson(item);
+
+
 
         if(!_equipmentList.any((e) => e.id == equipment.id)){
           _equipmentList.add(equipment);
