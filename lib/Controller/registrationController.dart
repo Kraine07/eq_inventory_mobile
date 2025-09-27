@@ -57,9 +57,9 @@ class _RegistrationControllerState extends State<RegistrationController> {
       final registerResponse = await userService.register(
           endpoint: "api/v1/register",
           registrationModel: {
-            "email" : _emailController.text,
-            "firstName" : _firstNameController.text,
-            "lastName" : _lastNameController.text,
+            "email" : _emailController.text.toLowerCase(),
+            "firstName" : _firstNameController.text.toLowerCase(),
+            "lastName" : _lastNameController.text.toLowerCase(),
           },
         params: _isAdmin ? "admin" : "editor"
       );

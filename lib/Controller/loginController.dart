@@ -80,7 +80,7 @@ class _LoginControllerState extends State<LoginController> {
             return Center(child: CircularProgressIndicator());
           }
       );
-      final Response loginResponse = await userService.login(loginEndpoint, _emailController.text, _passwordController.text);
+      final Response loginResponse = await userService.login(loginEndpoint, _emailController.text.toLowerCase(), _passwordController.text);
 
       Navigator.pop(context);
 

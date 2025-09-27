@@ -33,16 +33,9 @@ class EquipmentService extends APIService{
       List<dynamic> returnedList = jsonDecode(response.body);
 
       _equipmentList.clear();
-
-      returnedList.forEach((item){
-        EquipmentModel equipment = EquipmentModel.fromJson(item);
+      _equipmentList = returnedList.map((e) => EquipmentModel.fromJson(e)).toList();
 
 
-
-        if(!_equipmentList.any((e) => e.id == equipment.id)){
-          _equipmentList.add(equipment);
-        }
-      });
       groupedByProperty =  groupBy(_equipmentList, (e) => e.location!.property);
       groupedByPropertyThenLocation = groupEquipment(_equipmentList);
 

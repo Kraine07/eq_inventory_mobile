@@ -37,7 +37,7 @@ class AppDropdownInput<T> extends StatelessWidget {
         return null;
       },
       dropdownColor:  AppColors.appBlue,
-      initialValue: items.isEmpty? null : selectedItem, // ✅ new API
+      initialValue: items.isEmpty? null : selectedItem,
       isExpanded: true,
       decoration: InputDecoration(
         labelText: labelText,

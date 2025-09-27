@@ -68,6 +68,7 @@ class _EquipmentFormState extends State<EquipmentForm> {
   }
 
 
+
   @override
   void initState() {
 
@@ -96,16 +97,13 @@ class _EquipmentFormState extends State<EquipmentForm> {
 
 
     // submit form
-
-
-
     void submitForm() async {
       if (_formKey.currentState!.validate()) {
         final equipmentService = EquipmentService();
 
         final equipmentData = {
           'id': _equipmentId != null ? _equipmentId.toString() : null,
-          'serialNumber': _serialNumberController.text,
+          'serialNumber': _serialNumberController.text.toUpperCase(),
           'manufacturedDate': _dateController.text,
           'model': _selectedModel?.toJson(),
           'location': _selectedLocation?.toJson(),
@@ -175,7 +173,6 @@ class _EquipmentFormState extends State<EquipmentForm> {
                       visible: !widget.fromLocation,
                       child: AppDropdownInput(
                         selectedItem: _selectedLocation,
-                        // type: s,
                         prefixIcon: AppIcon(icon: Symbols.apartment, weight: 300),
                           labelText: "Location",
 
@@ -369,18 +366,29 @@ class _EquipmentFormState extends State<EquipmentForm> {
       final header = DropdownMenuItem<ModelModel>(
         value: null,
         enabled: false,
-        child: Text(
-          UtilityMethods.capitalizeEachWord(manufacturer.name ?? ""),
-          style: const TextStyle(
-            backgroundColor: AppColors.appLightBlue40,
-            decoration: TextDecoration.underline,
-            decorationThickness: 2,
-            decorationColor: AppColors.appWhite,
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          margin: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: AppColors.appWhite,
+                width: 1,
+              ),
+            ),
+          ),
+          child: Text(
+            UtilityMethods.capitalizeEachWord(manufacturer.name ?? ""),
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 20,
+            ),
           ),
         ),
       );
+
+
 
       // Models under this manufacturer
       final models = manufacturerService.modelList
@@ -389,9 +397,14 @@ class _EquipmentFormState extends State<EquipmentForm> {
         return DropdownMenuItem<ModelModel>(
           value: model,
           child: Padding(
-            padding: const EdgeInsets.only(left: 16.0),
+            padding: const EdgeInsets.only(left: 40.0),
             child: Text(
               UtilityMethods.capitalizeEachWord(model.description ?? ""),
+              style: const TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w300,
+                fontSize: 14,
+              ),
             ),
           ),
         );
@@ -414,12 +427,25 @@ class _EquipmentFormState extends State<EquipmentForm> {
       final propertyHeader = DropdownMenuItem<LocationModel>(
         value: null,
         enabled: false,
-        child: Text(
-          UtilityMethods.capitalizeEachWord(property.name ?? ""),
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w300,
-            color: AppColors.appWhite,
+        child: Container(
+          margin: EdgeInsets.only(top: 20),
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: AppColors.appWhite,
+                width: 1,
+              ),
+            )
+          ),
+          padding: EdgeInsets.all(12),
+          child: Text(
+            UtilityMethods.capitalizeEachWord(property.name ?? ""),
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: AppColors.appWhite,
+            ),
           ),
         ),
       );
@@ -429,7 +455,7 @@ class _EquipmentFormState extends State<EquipmentForm> {
         return DropdownMenuItem<LocationModel>(
           value: location,
           child: Padding(
-            padding: const EdgeInsets.only(left: 32.0),
+            padding: const EdgeInsets.only(left: 40.0),
             child: Text(
               UtilityMethods.capitalizeEachWord(location.name ?? ""),
               style: const TextStyle(
