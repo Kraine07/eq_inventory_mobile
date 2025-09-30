@@ -31,7 +31,7 @@ class _HeadingState extends State<Heading> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.appDarkBlue,
+      color: AppColors.appDarkBlue.withValues(alpha: 0.8),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

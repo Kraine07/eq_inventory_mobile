@@ -33,72 +33,79 @@ class _DashboardState extends State<Dashboard> {
      String? firstName = authUser?.firstName?.toUpperCase();
      String? lastName = authUser?.lastName?.toUpperCase();
 
-    return  DefaultTabController(
-      length: Provider.of<UserService>(context).authUser!.isAdmin?? false? 4: 2,
-      child: Scaffold(
-        body: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: 960
-            ),
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: 5),
-              decoration: BoxDecoration(
-                // color: AppColors.appBlue
-              ),
-              child: Column(
-                children: [
-                  Heading(searchController: _searchController,showIcon: false,name: "$lastName, $firstName",),
-
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        EquipmentScreen(),
-                        if (Provider.of<UserService>(context).authUser!.isAdmin?? false) UsersScreen(),
-                        if (Provider.of<UserService>(context).authUser!.isAdmin?? false) PropertiesScreen(),
-                        ReportsScreen(),
-                    ]),
+    return  Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: 960
+        ),
+        child: DefaultTabController(
+          length: Provider.of<UserService>(context).authUser!.isAdmin?? false? 4: 2,
+          child: Scaffold(
+            body: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: 960
+                ),
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  decoration: BoxDecoration(
+                    // color: AppColors.appBlue
                   ),
+                  child: Column(
+                    children: [
+                      Heading(searchController: _searchController,showIcon: false,name: "$lastName, $firstName",),
 
+                      Expanded(
+                        child: TabBarView(
+                          children: [
+                            EquipmentScreen(),
+                            if (Provider.of<UserService>(context).authUser!.isAdmin?? false) UsersScreen(),
+                            if (Provider.of<UserService>(context).authUser!.isAdmin?? false) PropertiesScreen(),
+                            ReportsScreen(),
+                        ]),
+                      ),
+
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+
+
+            bottomNavigationBar: Material(
+              color: AppColors.appDarkBlue.withValues(alpha: 0.8),
+              child: TabBar(
+
+                labelStyle: TextStyle(
+                  fontSize: 13,
+                  color: AppColors.accentColor
+                ),
+                indicator: BoxDecoration(),
+                indicatorColor: AppColors.accentColor,
+                dividerHeight: 0,
+
+
+                tabs: [
+                  Tab(
+                    text: "Equipment",
+                    icon: Icon(Symbols.kitchen),
+                  ),
+                  if (Provider.of<UserService>(context).authUser!.isAdmin?? false) Tab(
+                    text: "Users",
+                    icon: Icon(Symbols.group),
+                  ),
+                  if (Provider.of<UserService>(context).authUser!.isAdmin?? false) Tab(
+                    text: "Properties",
+                    icon: Icon(Symbols.apartment),
+                  ),
+                  Tab(
+                    text: "Reports",
+                    icon: Icon(Symbols.bar_chart),
+                  )
                 ],
               ),
             ),
-          ),
-        ),
-
-
-
-        bottomNavigationBar: Material(
-          color: AppColors.appDarkBlue,
-          child: TabBar(
-
-            labelStyle: TextStyle(
-              fontSize: 13,
-              color: AppColors.accentColor
-            ),
-            indicator: BoxDecoration(),
-            indicatorColor: AppColors.accentColor,
-            dividerHeight: 0,
-
-
-            tabs: [
-              Tab(
-                text: "Equipment",
-                icon: Icon(Symbols.kitchen),
-              ),
-              if (Provider.of<UserService>(context).authUser!.isAdmin?? false) Tab(
-                text: "Users",
-                icon: Icon(Symbols.group),
-              ),
-              if (Provider.of<UserService>(context).authUser!.isAdmin?? false) Tab(
-                text: "Properties",
-                icon: Icon(Symbols.apartment),
-              ),
-              Tab(
-                text: "Reports",
-                icon: Icon(Symbols.bar_chart),
-              )
-            ],
           ),
         ),
       ),

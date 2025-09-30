@@ -39,55 +39,58 @@ class _UsersScreenState extends State<UsersScreen> {
     return Consumer<UserService>(
       builder: (BuildContext context, UserService users, Widget? child) {
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            
-            // NEW USER BUTTON
-            InkWell(
-              onTap: (){
-                showBottomSheet(
-                  constraints: BoxConstraints(
-                    maxWidth: 960
-                  ),
-                    context: context, 
-                    builder: (BuildContext sheetContext) =>
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
+        return Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
 
-                          // show registration form
-                          child: RegistrationController(user: null,),
-                        )
-                );
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.appDarkBlue,
-                  borderRadius: BorderRadius.circular(8)
+              // NEW USER BUTTON
+              InkWell(
+                onTap: (){
+                  showBottomSheet(
+                    constraints: BoxConstraints(
+                      maxWidth: 960
+                    ),
+                      context: context,
+                      builder: (BuildContext sheetContext) =>
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+
+                            // show registration form
+                            child: RegistrationController(user: null,),
+                          )
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.appDarkBlue.withValues(alpha: 0.4),
+                    borderRadius: BorderRadius.circular(8)
+                  ),
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  child: Row(
+                    spacing: 20,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppIcon(icon: Symbols.person_add, weight: 200, ),
+                      Text("New User",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14,
+                        ),
+                      )
+                    ],
+                  ),
+
                 ),
-                margin: EdgeInsets.symmetric(vertical: 8),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                child: Row(
-                  spacing: 20,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppIcon(icon: Symbols.person_add, weight: 200, size: 38,),
-                    Text("New User",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        fontSize: 16,
-                      ),
-                    )
-                  ],
-                ),
-              
               ),
-            ),
-            
-            
-            // USER LIST
-            UserTile(users: users.userList)
-          ],
+
+
+              // USER LIST
+              UserTile(users: users.userList)
+            ],
+          ),
         );
 
       },

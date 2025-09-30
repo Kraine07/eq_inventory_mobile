@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:equipment_inventory/Components/updatePassword.dart';
@@ -93,7 +92,7 @@ class _LoginControllerState extends State<LoginController> {
         final  String errorMessage = responseBody['error'];
 
         // show error message
-        MessageHandler.showMessage(context, errorMessage, false);
+        MessageHandler.showMessage(context, message: errorMessage, isSuccessMessage: false);
       }
 
 

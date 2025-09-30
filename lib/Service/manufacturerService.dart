@@ -8,7 +8,7 @@ import 'dart:convert';
 import 'package:equipment_inventory/Model/modelModel.dart';
 import 'package:http/http.dart';
 
-import '../Model/locationModel.dart';
+
 import '../Model/manufacturerModel.dart';
 import 'apiService.dart';
 
@@ -35,6 +35,7 @@ class ManufacturerService extends APIService{
 
 
   void retrieveManufacturerList() async{
+    _manufacturerList.clear();
 
     Response response = await this.get('api/v1/get-all-manufacturers',  {});
     if(response.body.isNotEmpty){
@@ -50,6 +51,8 @@ class ManufacturerService extends APIService{
 
     }
   }
+
+
 
   void retrieveModelList() async{
     Response response = await this.get('api/v1/get-all-models',  {});
@@ -70,5 +73,40 @@ class ManufacturerService extends APIService{
   }
 
 
+
+
+
+  Future<Response?> addManufacturer(Map<String, dynamic> data) async{
+    return await this.post(
+        endpoint: 'api/v1/save-manufacturer',
+        data: data
+    );
+  }
+
+
+
+
+
+  Future<Response?> deleteManufacturer(BigInt? id) async{
+    return await this.post(
+        endpoint: "api/v1/delete-manufacturer/${id}",
+        data: {},
+
+    );
+    // if(response.statusCode==200){
+    //   retrieveManufacturerList();
+    //   notifyListeners();
+    // }
+    // else{
+    //   final responseBody = jsonDecode(response.body);
+    //   final errorMessage = responseBody["error"] ?? "Error deleting manufacturer.";
+    //   print("Delete failed: $errorMessage");
+    //   MessageHandler.showMessage(context, errorMessage, false);
+    // }
+
+
+
+
+  }
 
 }

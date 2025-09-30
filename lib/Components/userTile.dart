@@ -44,7 +44,7 @@ class _UserTileState extends State<UserTile> {
             dividerColor: AppColors.appLightBlue,
             children: widget.users.map((user) {
               return ExpansionPanelRadio(
-                backgroundColor: AppColors.appDarkBlue,
+                backgroundColor: AppColors.appBlue.withValues(alpha: 0.4),
                 value: widget.users.indexOf(user),
                 canTapOnHeader: true,
                 headerBuilder: (BuildContext context, bool isExpanded) {
@@ -125,7 +125,7 @@ class _UserTileState extends State<UserTile> {
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                        color: AppColors.appDarkBlue
+                        color: AppColors.appBlue.withValues(alpha: 0.4),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

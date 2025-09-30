@@ -131,16 +131,15 @@ class _EquipmentFormState extends State<EquipmentForm> {
             if (responseBody.isNotEmpty) {
               MessageHandler.showMessage(
                 context,
-                "Equipment added successfully",
-                true,
+                message: "Equipment added successfully",
               );
             }
           } else {
-            MessageHandler.showMessage(context, "Error adding equipment", false);
+            MessageHandler.showMessage(context, message: "Error adding equipment", isSuccessMessage: false);
           }
         } catch (e) {
           Navigator.pop(context); // close loading dialog if error
-          MessageHandler.showMessage(context, "Something went wrong: $e", false);
+          MessageHandler.showMessage(context, message: "Something went wrong: $e", isSuccessMessage: false);
         }
 
         // Refresh equipment list after request finishes

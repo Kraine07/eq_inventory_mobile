@@ -13,6 +13,7 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import 'package:provider/provider.dart';
 
+import '../Components/manufacturerSheet.dart';
 import '../Components/manufacturerTile.dart';
 import '../Model/locationModel.dart';
 import '../Service/propertyService.dart';
@@ -63,34 +64,30 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
               children: [
 
                 Row(
+                  spacing: 4,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+
+
+
 
                     // manufacturers/models management button
                     InkWell(
                       onTap: (){
                         showModalBottomSheet(
-                          backgroundColor: AppColors.appLightBlue,
-                          constraints: BoxConstraints(
-                            maxHeight: MediaQuery.of(context).size.height *.9,
-                            maxWidth: 960,
-                            minHeight: MediaQuery.of(context).size.height *.7
+                          shape: Border(
+                            top: BorderSide(
+                              color: AppColors.appWhite,
+                              width: 8
+                            )
                           ),
+                          showDragHandle: true,
+                          isScrollControlled: true,
                           context: context,
                           builder: (context){
-                            return Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Column(
-                                spacing: 20,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Center(child: Text("Manufacturers/Models",)),
-                                  ),
-                                  ManufacturerTile(manufacturers: manufacturerList,)
-                                ],
-                              ),
-                            );
+
+                            //manufacturer screen
+                            return ManufacturerSheet();
 
                           }
                         );
@@ -105,8 +102,13 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                           spacing: 8,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            AppIcon(icon: Symbols.manufacturing, weight: 300),
-                            Text("Manufacturers/Models")
+                            AppIcon(icon: Symbols.manufacturing, weight: 300,size: 20,),
+                            Text("Manufacturer Management",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 12,
+                              ),
+                            )
                           ]
                         ),
                       ),
@@ -119,14 +121,13 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                     InkWell(
                       onTap: (){
                         showModalBottomSheet(
-                          constraints: BoxConstraints(
-                            maxHeight: MediaQuery.of(context).size.height *.7,
-                            maxWidth: 960,
-                            minHeight: MediaQuery.of(context).size.height *.5
-                          ),
+                          showDragHandle: true,
+                          isScrollControlled: true,
+
                           context: context,
                           builder: (BuildContext sheetContext){
-                            return Padding(
+                            return Container(
+                              width: double.infinity,
                               padding: const EdgeInsets.all(20),
                               child: EquipmentForm(),
                             );
@@ -144,8 +145,13 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                         child: Row(
                           spacing: 8,
                           children: [
-                            AppIcon(icon: Symbols.add, weight: 300),
-                            Text("New Equipment")
+                            AppIcon(icon: Symbols.add, weight: 300,size: 20,),
+                            Text("New Equipment",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 12,
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -201,4 +207,8 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
     );
   }
 }
+
+
+
+
 

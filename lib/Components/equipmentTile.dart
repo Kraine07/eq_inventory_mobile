@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:equipment_inventory/Components/equipmentForm.dart';
 import 'package:equipment_inventory/Components/icon.dart';
@@ -118,10 +117,10 @@ class _EquipmentTileState extends State<EquipmentTile> {
                                         if(deleteResponse.statusCode == 200){
 
 
-                                          MessageHandler.showMessage(context, "Equipment deleted successfully", true);
+                                          MessageHandler.showMessage(context, message: "Equipment deleted successfully");
                                         }
                                         else{
-                                          MessageHandler.showMessage(context, "Error deleting equipment", false);
+                                          MessageHandler.showMessage(context, message: "Error deleting equipment", isSuccessMessage: false);
                                         }
 
                                         equipmentService.retrieveList();

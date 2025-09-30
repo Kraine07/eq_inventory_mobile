@@ -58,4 +58,44 @@ final ThemeData appTheme = ThemeData(
     ),
   ),
 
+
+
+  // BOTTOM SHEET THEME
+  bottomSheetTheme: BottomSheetThemeData(
+    showDragHandle: true,
+    modalBackgroundColor: AppColors.appLightBlue,
+    modalBarrierColor: AppColors.appDarkBlue.withValues(alpha: 0.8),
+
+
+    constraints: BoxConstraints(
+      maxWidth: 960,
+      maxHeight: 680,
+    ),
+
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero
+    )
+  ),
+
+
+
+    //dialog theme
+  dialogTheme: DialogThemeData(
+
+    insetPadding: EdgeInsets.all(8),
+    backgroundColor: AppColors.appLightBlue,
+
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8)
+    ),
+
+    titleTextStyle: TextStyle(
+      color: AppColors.appWhite,
+      fontWeight: FontWeight.w300,
+      fontSize: 24,
+    )
+
+  ),
+
+
 );
