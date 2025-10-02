@@ -29,7 +29,7 @@ class _ManufacturerSheetState extends State<ManufacturerSheet> {
   @override
   Widget build(BuildContext context) {
 
-    List<ManufacturerModel> manufacturerList = Provider.of<ManufacturerService>(context, listen: false).manufacturerList;
+    List<ManufacturerModel> manufacturerList = Provider.of<ManufacturerService>(context, listen: true).manufacturerList;
 
     return Padding(
           padding: const EdgeInsets.all(20.0),

@@ -2,22 +2,23 @@ import 'package:equipment_inventory/Components/textFormField.dart';
 import 'package:equipment_inventory/utilityMethods.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
 
+import '../Service/appHeaderService.dart';
+import '../Service/userService.dart';
+import '../loadPage.dart';
 import '../theme.dart';
 import 'icon.dart';
 
 class Heading extends StatefulWidget {
 
-  final TextEditingController searchController;
-  final bool showIcon;
+
   final String name;
 
 
    Heading({
      super.key,
      required this.name,
-     required this.searchController,
-     required this.showIcon
   });
 
 
@@ -26,10 +27,17 @@ class Heading extends StatefulWidget {
   State<Heading> createState() => _HeadingState();
 }
 
+
+
 class _HeadingState extends State<Heading> {
 
+  List<String> menuItems = ["update password", "logout"];
   @override
   Widget build(BuildContext context) {
+
+    final TextEditingController _searchController = TextEditingController();
+
+    final AppHeader appHeader = Provider.of<AppHeader>(context);
     return Material(
       color: AppColors.appDarkBlue.withValues(alpha: 0.8),
       child: Padding(
@@ -45,24 +53,38 @@ class _HeadingState extends State<Heading> {
               ,
               spacing: 20,
               children: [
-                Visibility(
-                  visible: widget.showIcon,
-                    child: AppIcon(icon: Symbols.arrow_back, weight: 500)),
-                Text("Equipment",
+
+                Text(UtilityMethods.capitalizeEachWord(appHeader.header ?? ""),
                   style: TextStyle(
-                      fontSize: 32
+                    letterSpacing: 2,
+                    fontWeight: FontWeight.w300,
+                      fontSize: 24
                   ),
                 ),
-                Expanded(
-                  child: Row(
-                    spacing: 12,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      AppIcon(icon: Symbols.add, weight: 300,size: 32,),
-                      AppIcon(icon: Symbols.construction, weight: 300,size: 32,)
-                    ],
-                  ),
-                )
+
+
+                PopupMenuButton<String>(
+                  onSelected: (String value){
+                    if(value == "update password"){
+                      //show update password screen
+                      UtilityMethods.showUpdatePassword(context);
+                    }
+                    else if(value == "logout"){
+                      //logout
+                      Provider.of<UserService>(context, listen: false).logout();
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoadPage()));
+                    }
+                  },
+                  icon: AppIcon(icon: Symbols.menu, weight: 300,size: 32,),
+                    itemBuilder: (context){
+                    return menuItems.map((item) {
+                       return PopupMenuItem<String>(
+                        value: item,
+                        child: Text(UtilityMethods.capitalizeEachWord(item)),
+                      );
+                    }).toList();
+                }),
+                // AppIcon(icon: Symbols.menu, weight: 300,size: 32,)
               ],
             ),
 
@@ -82,7 +104,7 @@ class _HeadingState extends State<Heading> {
                 label: "Search",
                 radius: 1000.0,
                 borderStyle: BorderStyle.none,
-                controller: widget.searchController,
+                controller: _searchController,
                 obscureText: false,
                 validator: (val){},
                 icon: AppIcon(icon: Symbols.search, weight: 300,size: 18,),

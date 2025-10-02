@@ -3,7 +3,6 @@
 import 'package:equipment_inventory/Components/equipmentForm.dart';
 import 'package:equipment_inventory/Components/icon.dart';
 import 'package:equipment_inventory/Components/locationsAtProperty.dart';
-import 'package:equipment_inventory/Model/manufacturerModel.dart';
 import 'package:equipment_inventory/Service/equipmentService.dart';
 import 'package:equipment_inventory/Service/manufacturerService.dart';
 import 'package:equipment_inventory/theme.dart';
@@ -14,10 +13,13 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../Components/manufacturerSheet.dart';
-import '../Components/manufacturerTile.dart';
 import '../Model/locationModel.dart';
+import '../Service/modelService.dart';
 import '../Service/propertyService.dart';
 import '../Service/userService.dart';
+
+
+
 
 class EquipmentScreen extends StatefulWidget {
   const EquipmentScreen({super.key});
@@ -38,7 +40,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
       Provider.of<EquipmentService>(context, listen: false).retrieveList(),
       Provider.of<PropertyService>(context, listen: false).retrievePropertyList(),
       Provider.of<ManufacturerService>(context, listen: false).retrieveManufacturerList(),
-      Provider.of<ManufacturerService>(context, listen: false).retrieveModelList(),
+      Provider.of<ModelService>(context, listen: false).retrieveModelList(),
     });
   }
 
@@ -53,7 +55,6 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
       builder: (context, eqService, manufacturerService, child){
 
         final equipmentList = eqService.equipmentList;
-        final manufacturerList = manufacturerService.manufacturerList;
 
         return Padding(
           padding: const EdgeInsets.all(12.0),

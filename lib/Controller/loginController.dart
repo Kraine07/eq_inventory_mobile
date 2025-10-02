@@ -15,6 +15,7 @@ import '../Components/textFormField.dart';
 import '../loadPage.dart';
 import '../messageHandler.dart';
 import '../theme.dart';
+import '../utilityMethods.dart';
 
 class LoginController extends StatefulWidget {
   const LoginController({super.key});
@@ -98,13 +99,7 @@ class _LoginControllerState extends State<LoginController> {
 
       // show update password form if password is temporary
       else if(responseBody.containsKey("message")){
-        showCupertinoSheet(
-            context: context,
-            useNestedNavigation: true,
-            builder: (BuildContext sheetContext){
-              return UpdatePassword(sheetContext: sheetContext);
-            }
-        );
+        UtilityMethods.showUpdatePassword(context);
       }
 
       else {

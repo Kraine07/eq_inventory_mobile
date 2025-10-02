@@ -17,7 +17,6 @@ import 'icon.dart';
 class ManufacturerForm extends StatelessWidget {
    ManufacturerForm({
     super.key,
-    // required this.manufacturerController,
   });
 
   final TextEditingController _manufacturerController =
@@ -84,7 +83,9 @@ class ManufacturerForm extends StatelessWidget {
    @override
   Widget build(BuildContext context) {
     return AlertDialog(
-
+      constraints: BoxConstraints(
+        maxWidth: 960,
+      ),
       title: Text("Add Manufacturer"),
       content: Container(
         width: MediaQuery.of(context).size.width,

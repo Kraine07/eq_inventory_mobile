@@ -51,7 +51,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                       ),
                       ),
 
-                      Text("Please update your password to continue."),
+
                     ],
                   ),
 

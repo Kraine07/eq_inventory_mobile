@@ -12,6 +12,7 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../Service/manufacturerService.dart';
+import '../Service/modelService.dart';
 import '../messageHandler.dart';
 import '../utilityMethods.dart';
 import 'icon.dart';
@@ -78,7 +79,7 @@ Future<void> _deleteManufacturer(BuildContext context, BigInt? id) async{
 class _ManufacturerTileState extends State<ManufacturerTile> {
   @override
   Widget build(BuildContext context) {
-    final List<ModelModel> models = Provider.of<ManufacturerService>(context).modelList;
+    final List<ModelModel> models = Provider.of<ModelService>(context).modelList;
 
     return Expanded(
       child: SingleChildScrollView(
@@ -91,7 +92,6 @@ class _ManufacturerTileState extends State<ManufacturerTile> {
               final List<ModelModel> manufacturerModels = models.where((model) =>
               model.manufacturer.id == manufacturer.id).toList();
 
-              final ManufacturerService manufacturerService = Provider.of<ManufacturerService>(context);
 
               return ExpansionPanelRadio(
                   backgroundColor: AppColors.appDarkBlue40,
@@ -101,17 +101,31 @@ class _ManufacturerTileState extends State<ManufacturerTile> {
                     return Padding(
                       padding: const EdgeInsets.all(20),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Row(
-                            spacing: 4,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
 
-                              Visibility(
-                                  visible: isExpanded,
-                                  child: InkWell(
+                          Text(UtilityMethods.capitalizeEachWord(manufacturer.name ?? ""),
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              letterSpacing: 2,
+                              fontWeight: FontWeight.w300,
+                              fontSize: 20,
+                            ),
+                          ),
+
+
+                          // manufacturer action buttons
+                          Visibility(
+                              visible: isExpanded,
+                              child: Row(
+                                spacing: 4,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+
+
+                                  // delete manufacturer button
+                                  InkWell(
                                       onTap: (){
                                         showDialog(
                                             context: context,
@@ -141,72 +155,104 @@ class _ManufacturerTileState extends State<ManufacturerTile> {
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: AppIcon(icon: Symbols.delete, weight: 300, size: 18,),
+                                        child: AppIcon(icon: Symbols.delete, weight: 300, color: AppColors.inactiveColor,),
                                       )
-                                  )
-                              ),
+                                  ),
 
 
-                              Text(UtilityMethods.capitalizeEachWord(manufacturer.name ?? ""),
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
-                                ),
-                              ),
 
-                            ],
+
+                                  // edit model button
+                                  InkWell(
+                                    onTap: (){
+
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: AppIcon(icon: Symbols.stylus, weight: 300,color: AppColors.accentColor,),
+                                    ),
+                                  ),
+                                ],
+                              )
                           ),
 
 
 
-                          Visibility(
-                            visible: isExpanded,
-                            child: InkWell(
-                                onTap: (){
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) =>
-                                          ModelForm(manufacturer: manufacturer)
-                                  );
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 12,vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.appLightBlue.withAlpha(60),
-                                    borderRadius: BorderRadius.circular(8)
-                                  ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      spacing: 8,
-                                      children: [
-                                        AppIcon(icon: Symbols.add, weight: 300, ),
-                                        Text("Model")
-                                      ],
-                                    ))),
-                          )
+
                         ],
                       ),
                     );
                   },
-                  body: GridView.builder(
-                    shrinkWrap: true,
-                    itemCount: manufacturerModels.length,
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 200, childAspectRatio: 2.5),
-                    itemBuilder: (context, index){
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    spacing: 8,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+
+                     InkWell(
+                          onTap: (){
+                            showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    ModelForm(manufacturer: manufacturer)
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(8),
+                              padding: EdgeInsets.symmetric(horizontal: 12,vertical: 8),
+                              decoration: BoxDecoration(
+                                  color: AppColors.appLightBlue.withAlpha(80),
+                                  borderRadius: BorderRadius.circular(8)
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                spacing: 8,
+                                children: [
+                                  AppIcon(icon: Symbols.add, weight: 300, ),
+                                  Text("Model")
+                                ],
+                              ))),
 
 
-                      return Container(
-                        margin: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppColors.appDarkBlue40,
-                          borderRadius: BorderRadius.circular(8)
-                        ),
-                        child: Center(
-                          child: Text(UtilityMethods.capitalizeEachWord(manufacturerModels[index].description ?? "")),
-                        )
-                      );
-                    }
+                      GridView.builder(
+                        shrinkWrap: true,
+                        itemCount: manufacturerModels.length,
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 200, childAspectRatio: 2.5),
+                        itemBuilder: (context, index){
+
+
+                          return Container(
+                            margin: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.appLightBlue.withAlpha(100),
+                                  offset: Offset(-2, -2),
+                                  blurStyle: BlurStyle.solid
+
+
+                                ),
+                                BoxShadow(
+                                  color: AppColors.appDarkBlue,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 4,
+                                  // blurStyle: BlurStyle.solid
+
+                                ),
+                              ],
+
+                              color: AppColors.appBlue,
+                              borderRadius: BorderRadius.circular(8)
+                            ),
+                            child: Center(
+                              child: Text(UtilityMethods.capitalizeEachWord(manufacturerModels[index].description ?? ""),
+
+                              ),
+                            )
+                          );
+                        }
+                      ),
+                    ],
                   )
               );
             }).toList()

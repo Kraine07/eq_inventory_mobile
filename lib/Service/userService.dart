@@ -44,6 +44,12 @@ class UserService extends APIService{
   }
 
 
+   void logout() {
+    _authUser = null;
+    isLoggedIn = false;
+    notifyListeners();
+  }
+
   void retrieveList() async{
     Response response = await this.get('api/v1/get-all-users',  {});
     if(response.body.isNotEmpty) {

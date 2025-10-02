@@ -15,6 +15,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
 import '../Model/locationModel.dart';
+import '../Service/modelService.dart';
 import '../theme.dart';
 import '../utilityMethods.dart';
 import 'icon.dart';
@@ -85,7 +86,7 @@ class _EquipmentFormState extends State<EquipmentForm> {
     Future.microtask(() => {
       Provider.of<PropertyService>(context, listen: false).retrieveLocationList(),
       Provider.of<ManufacturerService>(context, listen: false).retrieveManufacturerList(),
-      Provider.of<ManufacturerService>(context, listen: false).retrieveModelList(),
+      Provider.of<ModelService>(context, listen: false).retrieveModelList(),
     });
   }
 
@@ -155,8 +156,8 @@ class _EquipmentFormState extends State<EquipmentForm> {
 
 
 
-    return Consumer2<PropertyService, ManufacturerService>(
-      builder: (context, propertyService, manufacturerService, child) {
+    return Consumer3<PropertyService, ManufacturerService, ModelService>(
+      builder: (context, propertyService, manufacturerService, modelService, child) {
 
 
           return Center(
@@ -241,7 +242,7 @@ class _EquipmentFormState extends State<EquipmentForm> {
 
 
                       // items
-                      items: modelListBuilder(manufacturerService),
+                      items: modelListBuilder(manufacturerService, modelService),
                       onChanged: (value) {
                         if (value != null) {
                           setState(() {
@@ -266,7 +267,7 @@ class _EquipmentFormState extends State<EquipmentForm> {
 
 
                             // Models under this manufacturer
-                            final modelItems = manufacturerService.modelList
+                            final modelItems = modelService.modelList
                                 .where((m) => m.manufacturer.id == manufacturer.id)
                               .map((model) {
                           return Text(
@@ -359,7 +360,7 @@ class _EquipmentFormState extends State<EquipmentForm> {
 
 
   // model list builder
-  List<DropdownMenuItem<ModelModel>> modelListBuilder(ManufacturerService manufacturerService) {
+  List<DropdownMenuItem<ModelModel>> modelListBuilder(ManufacturerService manufacturerService, ModelService modelService) {
     return manufacturerService.manufacturerList.expand((manufacturer) {
       // Header (non-selectable)
       final header = DropdownMenuItem<ModelModel>(
@@ -390,7 +391,7 @@ class _EquipmentFormState extends State<EquipmentForm> {
 
 
       // Models under this manufacturer
-      final models = manufacturerService.modelList
+      final models = modelService.modelList
           .where((m) => m.manufacturer.id == manufacturer.id) // filter
           .map((model) {
         return DropdownMenuItem<ModelModel>(

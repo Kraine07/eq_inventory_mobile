@@ -1,5 +1,9 @@
 
 
+import 'package:flutter/material.dart';
+
+import 'Components/updatePassword.dart';
+
 class UtilityMethods {
 
 
@@ -52,5 +56,15 @@ class UtilityMethods {
   }
 
 
+
+  static void showUpdatePassword(BuildContext context){
+    showBottomSheet(
+        context: context,
+        builder: (BuildContext sheetContext){
+          return UpdatePassword(sheetContext: sheetContext);
+        }
+    );
+
+  }
 
 }
