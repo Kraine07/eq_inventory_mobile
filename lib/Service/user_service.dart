@@ -4,7 +4,7 @@
 import 'dart:convert';
 
 import 'package:equipment_inventory/Model/userModel.dart';
-import 'package:equipment_inventory/Service/apiService.dart';
+import 'package:equipment_inventory/Service/api_service.dart';
 import 'package:http/http.dart';
 
 class UserService extends APIService{

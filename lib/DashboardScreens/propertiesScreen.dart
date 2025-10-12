@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 
-import '../Service/propertyService.dart';
+import '../Service/property_service.dart';
 import '../theme.dart';
 import '../utilityMethods.dart';
 

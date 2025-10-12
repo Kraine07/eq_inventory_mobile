@@ -4,13 +4,9 @@
 
 
 import 'dart:convert';
-
-import 'package:equipment_inventory/Model/modelModel.dart';
 import 'package:http/http.dart';
-
-
 import '../Model/manufacturerModel.dart';
-import 'apiService.dart';
+import 'api_service.dart';
 
 class ManufacturerService extends APIService{
   List<ManufacturerModel> _manufacturerList = [];
@@ -43,7 +39,7 @@ class ManufacturerService extends APIService{
           _manufacturerList.add(returnedManufacturer);
         }
       });
-      _manufacturerList.sort((a, b) => a.name!.compareTo(b.name.toString()));
+      _manufacturerList.sort((a, b) => a.name!.toLowerCase().compareTo(b.name.toString().toLowerCase()));
       notifyListeners();
 
     }
@@ -55,7 +51,7 @@ class ManufacturerService extends APIService{
 
 
 
-  Future<Response?> addManufacturer(Map<String, dynamic> data) async{
+  Future<Response?> saveManufacturer(Map<String, dynamic> data) async{
     return await this.post(
         endpoint: 'api/v1/save-manufacturer',
         data: data

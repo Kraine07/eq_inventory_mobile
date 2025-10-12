@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
-import '../Service/appHeaderService.dart';
-import '../Service/userService.dart';
+import '../Service/app_header_service.dart';
+import '../Service/user_service.dart';
 import '../loadPage.dart';
 import '../theme.dart';
 import 'icon.dart';
@@ -65,14 +65,20 @@ class _HeadingState extends State<Heading> {
 
                 PopupMenuButton<String>(
                   onSelected: (String value){
+
+
                     if(value == "update password"){
                       //show update password screen
                       UtilityMethods.showUpdatePassword(context);
                     }
+
+
                     else if(value == "logout"){
                       //logout
                       Provider.of<UserService>(context, listen: false).logout();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoadPage()));
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => const LoadPage()));
                     }
                   },
                   icon: AppIcon(icon: Symbols.menu, weight: 300,size: 32,),

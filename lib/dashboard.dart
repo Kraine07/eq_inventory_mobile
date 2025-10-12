@@ -5,13 +5,14 @@ import 'package:equipment_inventory/DashboardScreens/propertiesScreen.dart';
 import 'package:equipment_inventory/DashboardScreens/reportsScreen.dart';
 import 'package:equipment_inventory/DashboardScreens/usersScreen.dart';
 import 'package:equipment_inventory/Model/userModel.dart';
+import 'package:equipment_inventory/loadPage.dart';
 import 'package:equipment_inventory/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
-import 'Service/appHeaderService.dart';
-import 'Service/userService.dart';
+import 'Service/app_header_service.dart';
+import 'Service/user_service.dart';
 
 
 class Dashboard extends StatefulWidget {
@@ -119,7 +120,8 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
     String? firstName = authUser?.firstName?.toUpperCase();
     String? lastName = authUser?.lastName?.toUpperCase();
 
-    return Center(
+    return Provider.of<UserService>(context, listen: false).isLoggedIn ?
+      Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 960),
         child: Scaffold(
@@ -159,7 +161,13 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
           ),
         ),
       ),
-    );
+    )
+
+
+        :
+
+
+    const LoadPage();
   }
 }
 

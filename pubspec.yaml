@@ -40,6 +40,13 @@ dependencies:
   email_validator: ^3.0.0
   http: ^1.5.0
   provider: ^6.1.5+1
+  camera: ^0.11.2
+  permission_handler: ^11.0.1
+  image_picker: ^1.2.0
+  cached_network_image: ^3.4.1
+
+
+
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +95,8 @@ flutter:
      - assets/images/app_icon.png
      - assets/images/eq_logo.png
      - assets/images/eq_logo_white.png
+     - assets/images/placeholder_image.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

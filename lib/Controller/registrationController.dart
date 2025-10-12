@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../Model/roleType.dart';
-import '../Service/userService.dart';
+import '../Service/user_service.dart';
 import '../theme.dart';
 
 class RegistrationController extends StatefulWidget {

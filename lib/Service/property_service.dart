@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:equipment_inventory/Model/locationModel.dart';
 import 'package:equipment_inventory/Model/propertyModel.dart';
-import 'package:equipment_inventory/Service/apiService.dart';
+import 'package:equipment_inventory/Service/api_service.dart';
 import 'package:http/http.dart';
 
 class PropertyService extends APIService {

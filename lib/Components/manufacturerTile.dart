@@ -11,11 +11,12 @@ import 'package:http/http.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 
-import '../Service/manufacturerService.dart';
-import '../Service/modelService.dart';
+import '../Service/manufacturer_service.dart';
+import '../Service/model_service.dart';
 import '../messageHandler.dart';
 import '../utilityMethods.dart';
 import 'icon.dart';
+import 'manufacturerForm.dart';
 
 class ManufacturerTile extends StatefulWidget {
 
@@ -165,7 +166,13 @@ class _ManufacturerTileState extends State<ManufacturerTile> {
                                   // edit model button
                                   InkWell(
                                     onTap: (){
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) =>
 
+                                          //  manufacturer form
+                                          ManufacturerForm(manufacturer: manufacturer,)
+                                      );
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),

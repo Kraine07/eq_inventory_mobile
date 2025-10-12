@@ -1,14 +1,15 @@
 
-import 'package:equipment_inventory/Service/modelService.dart';
+import 'package:equipment_inventory/Service/model_service.dart';
 import 'package:equipment_inventory/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'Service/appHeaderService.dart';
-import 'Service/equipmentService.dart';
-import 'Service/manufacturerService.dart';
-import 'Service/propertyService.dart';
-import 'Service/userService.dart';
+import 'Service/app_header_service.dart';
+import 'Service/camera_service.dart';
+import 'Service/equipment_service.dart';
+import 'Service/manufacturer_service.dart';
+import 'Service/property_service.dart';
+import 'Service/user_service.dart';
 import 'loadPage.dart';
 
 
@@ -21,6 +22,7 @@ void main() {
           ChangeNotifierProvider(create: (_)=>PropertyService()),
           ChangeNotifierProvider(create: (_)=>ManufacturerService()),
           ChangeNotifierProvider(create: (_)=>ModelService()),
+          ChangeNotifierProvider(create: (_)=>CameraService()),
           ChangeNotifierProvider(create: (_)=>AppHeader()),
         ],
       child: const MainApp(),

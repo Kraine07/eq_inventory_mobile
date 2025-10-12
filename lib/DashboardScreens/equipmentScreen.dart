@@ -3,8 +3,8 @@
 import 'package:equipment_inventory/Components/equipmentForm.dart';
 import 'package:equipment_inventory/Components/icon.dart';
 import 'package:equipment_inventory/Components/locationsAtProperty.dart';
-import 'package:equipment_inventory/Service/equipmentService.dart';
-import 'package:equipment_inventory/Service/manufacturerService.dart';
+import 'package:equipment_inventory/Service/equipment_service.dart';
+import 'package:equipment_inventory/Service/manufacturer_service.dart';
 import 'package:equipment_inventory/theme.dart';
 import 'package:equipment_inventory/utilityMethods.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +14,9 @@ import 'package:provider/provider.dart';
 
 import '../Components/manufacturerSheet.dart';
 import '../Model/locationModel.dart';
-import '../Service/modelService.dart';
-import '../Service/propertyService.dart';
-import '../Service/userService.dart';
+import '../Service/model_service.dart';
+import '../Service/property_service.dart';
+import '../Service/user_service.dart';
 
 
 

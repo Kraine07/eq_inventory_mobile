@@ -4,7 +4,7 @@
 import 'package:equipment_inventory/Components/button.dart';
 import 'package:equipment_inventory/Components/userTile.dart';
 import 'package:equipment_inventory/Controller/registrationController.dart';
-import 'package:equipment_inventory/Service/userService.dart';
+import 'package:equipment_inventory/Service/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';

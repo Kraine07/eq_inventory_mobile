@@ -1,4 +1,5 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipment_inventory/Components/equipmentForm.dart';
 import 'package:equipment_inventory/Components/icon.dart';
 import 'package:equipment_inventory/Model/equipmentModel.dart';
@@ -10,7 +11,8 @@ import 'package:http/http.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
-import '../Service/equipmentService.dart';
+import '../Service/equipment_service.dart';
+import '../camera_page.dart';
 import '../utilityMethods.dart';
 
 class EquipmentTile extends StatefulWidget {
@@ -33,6 +35,30 @@ class _EquipmentTileState extends State<EquipmentTile> {
   Widget build(BuildContext context) {
 
     EquipmentService equipmentService = Provider.of<EquipmentService>(context, listen: false);
+    final String imageUrl= "${equipmentService.baseURL}/api/v1/fnd-by-equipment?equipmentId=${widget.equipment.id}";
+
+
+
+    final Widget image =CachedNetworkImage(
+      imageUrl: imageUrl,
+      // height: 120,
+      width: 180,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => Image.asset(
+        'assets/images/placeholder_image.png',
+        // height: 120,
+        width: 180,
+        fit: BoxFit.cover,
+      ),
+      errorWidget: (context, url, error) => Image.asset(
+        'assets/images/placeholder_image.png',
+        // height: 120,
+        width: 180,
+        fit: BoxFit.cover,
+      ),
+    );
+
+
 
 
     return ConstrainedBox(
@@ -58,115 +84,170 @@ class _EquipmentTileState extends State<EquipmentTile> {
                 ),
                 child: Row(
                   spacing: 20,
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
 
-                    // edit button
+                    // Lazy-load equipment image
                     InkWell(
                       onTap: (){
-                        showBottomSheet(
-                            context: context,
-                            builder: (context){
-                              return EquipmentForm(equipment: widget.equipment, isEditing: true,);
-                            }
-                        );
+                        Navigator.push(
+                            context, MaterialPageRoute(builder: (context){
+                          return CameraPage(image: image);
+                        }));
                       },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: AppColors.appDarkBlue40
-                        ),
-                        padding: EdgeInsets.all(12),
-
-                        child: AppIcon(icon: Symbols.edit, weight: 500,size: 16,),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: image
                       ),
                     ),
 
 
 
+                    //equipment info
+                    Expanded(
+                      // flex: 2,
+                      child: Column(
+                        spacing: 12,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(UtilityMethods.capitalizeEachWord("${widget.equipment.model?.manufacturer.name} ${widget.equipment.model?.description}",),
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300,),
+),
 
-
-                    // delete button
-                    InkWell(
-                      onTap: (){
-                        showDialog(
-                            context: context,
-                            builder: (context){
-                              
-                              // delete confirmation dialog
-                              return AlertDialog(
-                                title: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  spacing: 12,
-                                  children: [
-                                    AppIcon(icon: Symbols.warning, weight: 300),
-                                    Text("Delete Equipment"),
-                                  ],
+                              Text(widget.equipment.serialNumber?.toUpperCase() ?? "",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w300,
+                                    letterSpacing: 1
                                 ),
-                                content: Text("Are you sure you want to delete this equipment?"),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      }, 
-                                      child: AppIcon(icon: Symbols.close, weight: 500)),
-
-                                  TextButton(
-                                      onPressed: () async{
-                                        Response deleteResponse = await equipmentService.post(endpoint: "api/v1/delete-equipment/${widget.equipment.id}", data: {});
-                                        if(deleteResponse.statusCode == 200){
+                              ),
+                            ],
+                          ),
 
 
-                                          MessageHandler.showMessage(context, message: "Equipment deleted successfully");
+                          // action buttons
+                          Row(
+                            spacing: 20,
+                            // mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+
+                              // edit button
+                              InkWell(
+                                onTap: (){
+
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    showBottomSheet(
+                                        context: context,
+                                        builder: (context){
+                                          return EquipmentForm(equipment: widget.equipment, isEditing: true,);
                                         }
-                                        else{
-                                          MessageHandler.showMessage(context, message: "Error deleting equipment", isSuccessMessage: false);
+                                    );
+                                  });
+
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: AppColors.appDarkBlue40
+                                  ),
+                                  padding: EdgeInsets.all(12),
+
+                                  child: AppIcon(icon: Symbols.edit, weight: 500,size: 16,),
+                                ),
+                              ),
+
+
+
+
+
+                              // delete button
+                              InkWell(
+                                onTap: (){
+
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context){
+
+                                          // delete confirmation dialog
+                                          return AlertDialog(
+                                            title: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              spacing: 12,
+                                              children: [
+                                                AppIcon(icon: Symbols.warning, weight: 300),
+                                                Text("Delete Equipment"),
+                                              ],
+                                            ),
+                                            content: Text("Are you sure you want to delete this equipment?"),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: AppIcon(icon: Symbols.close, weight: 500)),
+
+                                              TextButton(
+                                                  onPressed: () async{
+                                                    Response deleteResponse = await equipmentService.post(endpoint: "api/v1/delete-equipment/${widget.equipment.id}", data: {});
+                                                    if(deleteResponse.statusCode == 200){
+
+
+                                                      MessageHandler.showMessage(context, message: "Equipment deleted successfully");
+                                                    }
+                                                    else{
+                                                      MessageHandler.showMessage(context, message: "Error deleting equipment", isSuccessMessage: false);
+                                                    }
+
+                                                    equipmentService.retrieveList();
+                                                    Navigator.push(
+                                                        context, MaterialPageRoute(builder: (context){
+                                                      return LoadPage();
+                                                    }));
+                                                  },
+                                                  child: AppIcon(icon: Symbols.check, weight: 500, ))
+                                            ],
+
+                                          );
                                         }
 
-                                        equipmentService.retrieveList();
-                                        Navigator.push(
-                                            context, MaterialPageRoute(builder: (context){
-                                          return LoadPage();
-                                        }));
-                                      }, 
-                                      child: AppIcon(icon: Symbols.check, weight: 500, ))
-                                ],
+                                    );
+                                  });
 
-                              );
-                            }
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: AppColors.accentColor40
+                                  ),
+                                  padding: EdgeInsets.all(12),
 
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: AppColors.accentColor40
-                        ),
-                        padding: EdgeInsets.all(12),
+                                  child: AppIcon(icon: Symbols.delete, weight: 500,size: 16,),
+                                ),
+                              ),
+                            ],
+                          ),
 
-                        child: AppIcon(icon: Symbols.delete, weight: 500,size: 16,),
+                        ],
                       ),
                     ),
+
+
+
                   ],
                 ),
               ),
 
 
-              //equipment info
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(UtilityMethods.capitalizeEachWord("${widget.equipment.model?.manufacturer.name} ${widget.equipment.model?.description}",)),
 
-                  Text(widget.equipment.serialNumber?.toUpperCase() ?? "",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w300,
-                      letterSpacing: 1
-                    ),
-                  )
-                ],
-              ),
+
             ],
           ),
         ),

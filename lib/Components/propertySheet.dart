@@ -1,4 +1,4 @@
-import 'package:equipment_inventory/Service/propertyService.dart';
+import 'package:equipment_inventory/Service/property_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';

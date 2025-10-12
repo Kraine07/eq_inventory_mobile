@@ -6,7 +6,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
 import '../Model/manufacturerModel.dart';
-import '../Service/manufacturerService.dart';
+import '../Service/manufacturer_service.dart';
 import '../theme.dart';
 import 'icon.dart';
 import 'manufacturerForm.dart';

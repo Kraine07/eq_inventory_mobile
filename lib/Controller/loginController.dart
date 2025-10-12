@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:email_validator/email_validator.dart';
 import 'package:equipment_inventory/Components/updatePassword.dart';
 import 'package:equipment_inventory/Model/userModel.dart';
-import 'package:equipment_inventory/Service/userService.dart';
+import 'package:equipment_inventory/Service/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -72,6 +72,8 @@ class _LoginControllerState extends State<LoginController> {
 
     if (_formKey.currentState!.validate()) {
 
+
+
       // show loading dialog
       showDialog(
           context: context,
@@ -99,10 +101,17 @@ class _LoginControllerState extends State<LoginController> {
 
       // show update password form if password is temporary
       else if(responseBody.containsKey("message")){
+
         UtilityMethods.showUpdatePassword(context);
       }
 
       else {
+        // reset form
+        _formKey.currentState?.reset();
+        _emailController.clear();
+        _passwordController.clear();
+
+
         // Set AuthUser
         UserModel? authUser;
         authUser = UserModel.fromJson(responseBody);

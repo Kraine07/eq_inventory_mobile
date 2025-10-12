@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../Controller/registrationController.dart';
 import '../Model/roleType.dart';
 import '../Model/userModel.dart';
-import '../Service/userService.dart';
+import '../Service/user_service.dart';
 import '../theme.dart';
 import '../utilityMethods.dart';
 import 'icon.dart';

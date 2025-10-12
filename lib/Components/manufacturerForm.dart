@@ -5,7 +5,8 @@
 import 'dart:convert';
 
 import 'package:equipment_inventory/Components/textFormField.dart';
-import 'package:equipment_inventory/Service/manufacturerService.dart';
+import 'package:equipment_inventory/Model/manufacturerModel.dart';
+import 'package:equipment_inventory/Service/manufacturer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -15,8 +16,11 @@ import '../messageHandler.dart';
 import 'icon.dart';
 
 class ManufacturerForm extends StatelessWidget {
+
+  ManufacturerModel? manufacturer;
    ManufacturerForm({
     super.key,
+     this.manufacturer
   });
 
   final TextEditingController _manufacturerController =
@@ -43,23 +47,24 @@ class ManufacturerForm extends StatelessWidget {
 
 
        final manufacturerData = {
+         "id": manufacturer?.id.toString() ?? null,
          'name': _manufacturerController.text,
        };
 
-       Response? response = await manufacturerService.addManufacturer(manufacturerData);
+       Response? response = await manufacturerService.saveManufacturer(manufacturerData);
 
        Navigator.pop(context); // close loading dialog
 
        if (response != null && response.statusCode == 201) {
          manufacturerService.retrieveManufacturerList();
-         MessageHandler.showMessage(context, message: "Manufacturer added successfully");
+         MessageHandler.showMessage(context, message: "Manufacturer saved successfully");
          // MessageHandler.showMessage(context, "Manufacturer added successfully", true);
          Navigator.pop(context); // close manufacturer form
        } else {
 
 
          // show backend or default error message
-         String errorMessage = "Error adding manufacturer";
+         String errorMessage = "Error saving manufacturer";
          if (response?.body.isNotEmpty == true) {
            try {
              final decoded = jsonDecode(response!.body);
@@ -69,6 +74,7 @@ class ManufacturerForm extends StatelessWidget {
            } catch (_) {}
          }
          MessageHandler.showMessage(context,message:  errorMessage, isSuccessMessage: false);
+         print(errorMessage);
        }
      }
    }
@@ -82,11 +88,13 @@ class ManufacturerForm extends StatelessWidget {
 
    @override
   Widget build(BuildContext context) {
+     _manufacturerController.text = manufacturer?.name ?? "";
+
     return AlertDialog(
       constraints: BoxConstraints(
         maxWidth: 960,
       ),
-      title: Text("Add Manufacturer"),
+      title: manufacturer == null ? Text("Add Manufacturer") : Text("Update Manufacturer"),
       content: Container(
         width: MediaQuery.of(context).size.width,
         child: Form(
@@ -125,7 +133,7 @@ class ManufacturerForm extends StatelessWidget {
           onPressed: () {
             addManufacturer(context);
           },
-          child: Text("Add",),
+          child: manufacturer==null ? Text("Add",) : Text("Update"),
         )
       ],
     );

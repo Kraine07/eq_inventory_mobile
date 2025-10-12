@@ -9,7 +9,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
 
-import '../Service/modelService.dart';
+import '../Service/model_service.dart';
 import 'icon.dart';
 
 class ModelForm extends StatelessWidget {
