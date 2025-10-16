@@ -12,7 +12,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
 import '../Service/equipment_service.dart';
-import '../camera_page.dart';
+import '../equipment_image_page.dart';
 import '../utilityMethods.dart';
 
 class EquipmentTile extends StatefulWidget {
@@ -34,8 +34,9 @@ class _EquipmentTileState extends State<EquipmentTile> {
   @override
   Widget build(BuildContext context) {
 
-    EquipmentService equipmentService = Provider.of<EquipmentService>(context, listen: false);
-    final String imageUrl= "${equipmentService.baseURL}/api/v1/fnd-by-equipment?equipmentId=${widget.equipment.id}";
+    EquipmentService equipmentService = Provider.of<EquipmentService>(context);
+    final String endPoint = "/api/v1/find-by-equipment?equipmentId=${widget.equipment.id}";
+    final String imageUrl= "${equipmentService.baseURL}$endPoint";
 
 
 
@@ -92,7 +93,7 @@ class _EquipmentTileState extends State<EquipmentTile> {
                       onTap: (){
                         Navigator.push(
                             context, MaterialPageRoute(builder: (context){
-                          return CameraPage(image: image);
+                          return EquipmentImagePage(image: image, equipmentId: widget.equipment.id);
                         }));
                       },
                       child: ClipRRect(

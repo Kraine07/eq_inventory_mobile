@@ -1,6 +1,6 @@
 
 
-import 'package:equipment_inventory/camera_page.dart';
+import 'package:equipment_inventory/equipment_image_page.dart';
 import 'package:flutter/material.dart';
 import 'package:equipment_inventory/dashboard.dart';
 import 'package:provider/provider.dart';

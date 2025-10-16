@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 
+import 'package:equipment_inventory/Components/button.dart';
+import 'package:equipment_inventory/app_camera_preview.dart';
 import 'package:equipment_inventory/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,25 +11,28 @@ import 'package:provider/provider.dart';
 
 import 'Service/camera_service.dart';
 
-class CameraPage extends StatefulWidget {
+class EquipmentImagePage extends StatefulWidget {
+  final BigInt? equipmentId;
   final Widget? image;
-  const CameraPage({super.key, required this.image});
+  const EquipmentImagePage({super.key, required this.image, required this.equipmentId});
 
   @override
-  State<CameraPage> createState() => _CameraPageState();
+  State<EquipmentImagePage> createState() => _EquipmentImagePageState();
 }
 
 
 
 
-class _CameraPageState extends State<CameraPage> {
+class _EquipmentImagePageState extends State<EquipmentImagePage> {
 
 
   @override
   void initState() {
-    Provider.of<CameraService>(context, listen: false).disposeCamera();
-    Provider.of<CameraService>(context, listen: false).initializeCamera(context);
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<CameraService>(context, listen: false).disposeCamera();
+    });
   }
 
 
@@ -65,9 +70,11 @@ class _CameraPageState extends State<CameraPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
+              constraints: BoxConstraints(
+                maxHeight: 700,
+                maxWidth: 300,
+              ),
               color: AppColors.appWhite,
-              height: 500,
-              width: 300,
               child: pickedImageData != null? Image.memory(pickedImageData?? Uint8List(0)) : widget.image,
 
             ),
@@ -83,7 +90,8 @@ class _CameraPageState extends State<CameraPage> {
                 // camera button
                 ElevatedButton(
                   onPressed: (){
-                    pickImage(ImageSource.camera);
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>AppCameraPreview()));
+                    // pickImage(ImageSource.camera);
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: AppColors.appWhite
@@ -105,6 +113,10 @@ class _CameraPageState extends State<CameraPage> {
                 )
               ],
             ),
+
+            AppButton(text: "Upload", onPressed: (){
+              Provider.of<CameraService>(context, listen: false).uploadImage(widget.equipmentId!, context);
+            })
           ],
         ),
       )
