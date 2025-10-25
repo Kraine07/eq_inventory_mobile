@@ -175,6 +175,10 @@ class CameraService extends APIService {
     }
   }
 
+
+
+
+
   Future<void> pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -183,22 +187,81 @@ class CameraService extends APIService {
     }
   }
 
+
   Future<void> captureImage(BuildContext context) async {
     if (!_isCameraInitialized || _cameraController == null || _isCapturing) return;
 
     _isCapturing = true;
+
+    // Show progress dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
     try {
-      XFile _capturedImage = await _cameraController!.takePicture();
-      _capturedImageData = await _capturedImage.readAsBytes();
+      // Optional: stop preview before capture (reduces buffer pressure)
+      if (_cameraController!.value.isStreamingImages) {
+        await _cameraController!.stopImageStream();
+      }
+
+      final XFile captured = await _cameraController!.takePicture();
+
+      // Read bytes in a microtask to avoid blocking UI
+      _capturedImageData = await captured.readAsBytes();
       notifyListeners();
-    } on CameraException catch (_) {
+
+      // Give Android a moment to release buffers
+      await Future.delayed(const Duration(milliseconds: 150));
+    } on CameraException catch (e) {
       MessageHandler.showMessage(
-          context, message: "Error capturing image.", isSuccessMessage: false);
-      return;
+        context,
+        message: "Error capturing image: ${e.description}",
+        isSuccessMessage: false,
+      );
     } finally {
       _isCapturing = false;
+
+      // Close the progress dialog
+      if (Navigator.canPop(context)) Navigator.pop(context);
     }
   }
+
+
+
+
+
+
+  // Future<void> captureImage(BuildContext context) async {
+  //   if (!_isCameraInitialized || _cameraController == null || _isCapturing) return;
+  //
+  //
+  //   showDialog(
+  //       context: context,
+  //       barrierDismissible: false,
+  //       builder: (context){
+  //         return Center(child: CircularProgressIndicator());
+  //       }
+  //   );
+  //
+  //   _isCapturing = true;
+  //   try {
+  //     XFile _capturedImage = await _cameraController!.takePicture();
+  //     _capturedImageData = await _capturedImage.readAsBytes();
+  //     notifyListeners();
+  //   } on CameraException catch (_) {
+  //     MessageHandler.showMessage(
+  //         context, message: "Error capturing image.", isSuccessMessage: false);
+  //     return;
+  //   } finally {
+  //     _isCapturing = false;
+  //   }
+  // }
+
+
+
+
 
   Future<void> disposeCamera() async {
     // Stop image stream and dispose the controller safely
@@ -215,7 +278,6 @@ class CameraService extends APIService {
       _cameraController = null;
       _capturedImageData = null;
       _isCameraInitialized = false;
-      notifyListeners();
     }
   }
 

@@ -25,7 +25,7 @@ class APIService extends ChangeNotifier {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       },
-    ).timeout(Duration(seconds: 10));
+    ).timeout(Duration(seconds: 80));
 
     return response;
   }
@@ -101,39 +101,6 @@ class APIService extends ChangeNotifier {
 
 
 
-
-
-//
-  // Future<http.StreamedResponse> postMultipart({
-  //   required String endpoint,
-  //   required Map<String, String> fields,
-  //   required Uint8List fileBytes,
-  //   required String fileFieldName,
-  //   String filename = "upload.jpg",
-  // }) async {
-  //   final uri = Uri.parse('$baseURL/$endpoint');
-  //
-  //   final mimeType = lookupMimeType('', headerBytes: fileBytes) ?? 'image/jpeg';
-  //   final mimeParts = mimeType.split('/');
-  //
-  //   var request = http.MultipartRequest('POST', uri);
-  //
-  //   // Add text fields
-  //   fields.forEach((key, value) {
-  //     request.fields[key] = value;
-  //   });
-  //
-  //   // Add file
-  //   request.files.add(http.MultipartFile.fromBytes(
-  //     fileFieldName,
-  //     fileBytes,
-  //     filename: filename,
-  //     contentType: MediaType(mimeParts[0], mimeParts[1]),
-  //   ));
-  //
-  //   return await request.send();
-  // }
-  //
 
 
 }

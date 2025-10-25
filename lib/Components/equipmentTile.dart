@@ -40,22 +40,22 @@ class _EquipmentTileState extends State<EquipmentTile> {
 
 
 
-    final Widget image =CachedNetworkImage(
+    final Widget image = CachedNetworkImage(
       imageUrl: imageUrl,
       // height: 120,
       width: 180,
-      fit: BoxFit.cover,
+      fit: BoxFit.contain,
       placeholder: (context, url) => Image.asset(
         'assets/images/placeholder_image.png',
         // height: 120,
         width: 180,
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
       ),
       errorWidget: (context, url, error) => Image.asset(
         'assets/images/placeholder_image.png',
         // height: 120,
         width: 180,
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
       ),
     );
 

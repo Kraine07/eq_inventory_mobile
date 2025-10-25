@@ -125,18 +125,19 @@ class _EquipmentFormState extends State<EquipmentForm> {
 
           Navigator.pop(context); // close loading dialog
 
-          if (addEquipmentResponse.statusCode == 200) {
+          if (addEquipmentResponse.statusCode == 200 ||
+              addEquipmentResponse.statusCode == 201) {
             final Map<String, dynamic> responseBody =
             jsonDecode(addEquipmentResponse.body);
 
             if (responseBody.isNotEmpty) {
               MessageHandler.showMessage(
                 context,
-                message: "Equipment added successfully",
+                message: "Equipment saved successfully",
               );
             }
           } else {
-            MessageHandler.showMessage(context, message: "Error adding equipment", isSuccessMessage: false);
+            MessageHandler.showMessage(context, message: "Error saving equipment", isSuccessMessage: false);
           }
         } catch (e) {
           Navigator.pop(context); // close loading dialog if error

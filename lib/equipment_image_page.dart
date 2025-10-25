@@ -3,10 +3,12 @@ import 'dart:typed_data';
 
 
 import 'package:equipment_inventory/Components/button.dart';
+import 'package:equipment_inventory/Components/icon.dart';
 import 'package:equipment_inventory/app_camera_preview.dart';
 import 'package:equipment_inventory/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 
 import 'Service/camera_service.dart';
@@ -25,14 +27,23 @@ class EquipmentImagePage extends StatefulWidget {
 
 class _EquipmentImagePageState extends State<EquipmentImagePage> {
 
+  late CameraService _cameraService;
+
+
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cameraService = Provider.of<CameraService>(context, listen: false);
+  }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<CameraService>(context, listen: false).disposeCamera();
-    });
+
+  @override
+  void dispose() {
+
+    _cameraService.disposeCamera();
+
+    super.dispose();
   }
 
 
@@ -65,59 +76,136 @@ class _EquipmentImagePageState extends State<EquipmentImagePage> {
 
       ),
       body: Center(
-        child: Column(
-          spacing: 20,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              constraints: BoxConstraints(
-                maxHeight: 700,
-                maxWidth: 300,
-              ),
-              color: AppColors.appWhite,
-              child: pickedImageData != null? Image.memory(pickedImageData?? Uint8List(0)) : widget.image,
-
-            ),
-
-
-
-            // pick image buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: 20,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
-
-                // camera button
-                ElevatedButton(
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>AppCameraPreview()));
-                    // pickImage(ImageSource.camera);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: AppColors.appWhite
-                  ),
-                  child: Text("Camera",
+            
+                // upload image button
+                Visibility(
+                  visible: Provider.of<CameraService>(context, listen: false).capturedImageData != null,
+                  child: IconButton(
+                    onPressed: (){
+                      Provider.of<CameraService>(context, listen: false).uploadImage(widget.equipmentId!, context);
+                    },
+                    icon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 8,
+                      children: [
+                        Icon(Icons.upload),
+                        Text("Upload Image",
+                          style: TextStyle(
+                              fontSize: 16
+                          ),
+                        )
+                      ],
+                    ),
+                    iconSize: 40,
+                    style: IconButton.styleFrom(
+                      padding: EdgeInsets.all(12),
+                      backgroundColor: AppColors.appDarkBlue40,
+                      foregroundColor: AppColors.appWhite,
+                    ),
+            
                   ),
                 ),
+            
+            
+            
+                // image preview
+                InteractiveViewer(
+                  maxScale: 3,
+                  minScale: 1,
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.7
+                    ),
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.transparent,
+                    child: pickedImageData != null? Image.memory(
+                        pickedImageData,
+                      fit: BoxFit.contain,
+                    ) : widget.image,
 
-
-                // gallery button
-                ElevatedButton(
-                  onPressed: (){
-                    pickImage(ImageSource.gallery);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      foregroundColor: AppColors.appWhite
                   ),
-                  child: Text("Gallery"),
-                )
+                ),
+            
+                InkWell(
+                  onTap: (){
+            
+            
+                    showModalBottomSheet(context: context, builder: (context){
+                      return Container(
+                        height: 200,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+            
+                            // capture image button
+                            InkWell(
+                              onTap: ()async {
+                                await Navigator.push(context, MaterialPageRoute(builder: (context)=>AppCameraPreview()));
+                                Navigator.pop(context);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    AppIcon(icon: Symbols.photo_camera, weight: 200, size: 60,),
+                                    Text("Take Photo"),
+                                  ],
+                                ),
+                              ),
+                            ),
+            
+            
+                            // gallery button
+                            InkWell(
+                              onTap: (){
+                                pickImage(ImageSource.gallery);
+                                Navigator.pop(context);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    AppIcon(icon: Symbols.photo_library, weight: 200, size: 60,),
+                                    Text("Choose from Gallery"),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+            
+                      );
+                    });
+                  },
+            
+            
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: AppColors.appDarkBlue40,
+                    ),
+                      child: AppIcon(icon: Symbols.change_circle, weight: 300, size: 40,)
+                  ),
+                ),
+            
+            
+            
+            
+            
               ],
             ),
-
-            AppButton(text: "Upload", onPressed: (){
-              Provider.of<CameraService>(context, listen: false).uploadImage(widget.equipmentId!, context);
-            })
-          ],
+          ),
         ),
       )
     );

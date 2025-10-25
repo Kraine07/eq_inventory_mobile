@@ -118,9 +118,13 @@ class _LoginControllerState extends State<LoginController> {
         Provider.of<UserService>(context, listen: false).setAuthUser = authUser;
         Provider.of<UserService>(context, listen: false).isLoggedIn = true;
 
-        // Load Dashboard
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const LoadPage()));
+        // Load Dashboard and prevent going back to login
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const LoadPage()),
+              (Route<dynamic> route) => false,
+        );
+
       }
     }
   }
